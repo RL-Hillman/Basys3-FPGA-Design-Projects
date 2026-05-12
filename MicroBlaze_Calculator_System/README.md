@@ -19,7 +19,6 @@ The calculator supports four operating modes:
 | Advanced Calculator | `SW15 = 0`, `SW0 = 1` | ADD, SUB, MUL, DIV |
 | Invalid Mode | `SW15 = 1`, `SW0 = 1` | Warning message and blinking side LEDs |
 
-
 ## Project Goal
 
 The goal of this project is to demonstrate a complete FPGA-based embedded system that combines hardware design in Vivado with modular C firmware running on a MicroBlaze soft processor.
