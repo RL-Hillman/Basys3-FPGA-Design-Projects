@@ -106,10 +106,10 @@ After building the MicroBlaze application, the generated ELF file size was:
 
 | Section | Size (bytes) | Approx. KiB | Meaning |
 |---|---:|---:|---|
-| `text` | 25,024 | 24.44 KiB | Program code and read-only data |
-| `data` | 700 | 0.68 KiB | Initialized global/static variables |
-| `bss` | 3,244 | 3.17 KiB | Uninitialized global/static variables |
-| `dec` | 28,968 | 28.29 KiB | Total static size |
+| `text` | 25,024 | 24.44 | Program code and read-only data |
+| `data` | 700 | 0.68 | Initialized global/static variables |
+| `bss` | 3,244 | 3.17  | Uninitialized global/static variables |
+| `dec` | 28,968 | 28.29  | Total static size |
 | `hex` | `0x7128` | — | Total size in hexadecimal |
 
 ```text
