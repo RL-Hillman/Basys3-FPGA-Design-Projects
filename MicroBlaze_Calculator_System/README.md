@@ -8,7 +8,7 @@ This project implements an embedded calculator system on the Basys3 FPGA board u
 
 The system is controlled through board switches, push buttons, LEDs, a 4-digit 7-segment display, and UART terminal communication.
 
-The calculator supports two operating modes:
+The calculator supports four operating modes:
 
 | Mode | Switch Setting | Supported Operations |
 |---|---|---|
