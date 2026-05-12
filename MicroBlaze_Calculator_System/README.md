@@ -1,8 +1,6 @@
 # MicroBlaze Calculator System
 
-<p align="center">
-  <img src="docs/images/block_design.png" width="800" alt="Vivado Block Design">
-</p>
+
 
 ## Overview
 
