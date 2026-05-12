@@ -6,7 +6,7 @@
 
 ## Overview
 
-This project implements an embedded calculator system on the Digilent Basys3 FPGA board using a Xilinx MicroBlaze soft processor.
+This project implements an embedded calculator system on the Basys3 FPGA board using a Xilinx MicroBlaze soft processor.
 
 The system is controlled through board switches, push buttons, LEDs, a 4-digit 7-segment display, and UART terminal communication.
 
