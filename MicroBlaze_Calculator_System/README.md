@@ -61,23 +61,28 @@ The Vivado hardware system includes:
 
 ## Firmware Structure
 
-The firmware is written in C and divided into small functions for readability and maintainability.
+The firmware is written in C and organized into modular functions.
 
 | Function | Description |
 |---|---|
-| `Initialize()` | Initializes GPIO and UART peripherals |
-| `ReadSwitches()` | Reads the DIP switch values |
+| `main()` | Main program loop. Continuously checks the selected mode and calls the matching system function |
+| `Initialize()` | Initializes AXI GPIO peripherals and UART-Lite |
+| `ReadSwitches()` | Reads the 16 DIP switch values |
 | `ReadSwMode()` | Extracts the mode bits from `SW15` and `SW0` |
-| `WriteLeds()` | Writes values to the board LEDs |
-| `LedPatt()` | Runs the menu LED animation |
-| `put7SEG()` | Writes one digit to the 7-segment display |
-| `Write7SEG()` | Displays a 4-character word using multiplexing |
-| `Decode7Seg()` | Converts characters into active-low 7-segment patterns |
-| `UartTryGetChar()` | Reads UART input without blocking |
-| `ProcessInputChar()` | Parses signed decimal floating-point input |
-| `simpleCalc()` | Runs ADD/SUB calculator mode |
-| `advancedCalc()` | Runs ADD/SUB/MUL/DIV calculator mode |
-| `ClearScreen()` | Clears the UART terminal screen |
+| `ReadButtons()` | Reads the push-button GPIO input |
+| `WriteLeds()` | Writes values to the 16 board LEDs |
+| `LedPatt()` | Runs the menu moving LED animation |
+| `put7SEG()` | Writes one active anode and one segment pattern to the 7-segment display |
+| `Write7SEG()` | Displays a 4-character word using 7-segment multiplexing |
+| `Decode7Seg()` | Converts a character into an active-low 7-segment pattern |
+| `ClearScreen()` | Clears the UART terminal using ANSI escape sequences |
+| `UartTryGetChar()` | Reads one UART character without blocking the program |
+| `UartSendChar()` | Sends one character through UART-Lite |
+| `UartSendUnsignedInt()` | Sends an unsigned integer through UART without using heavy formatted printing |
+| `UartSendFloat3()` | Sends a floating-point number with 3 decimal digits |
+| `ProcessInputChar()` | Builds and parses signed decimal input from UART characters |
+| `simpleCalc()` | Runs Simple Calculator mode: ADD and SUB |
+| `advancedCalc()` | Runs Advanced Calculator mode: ADD, SUB, MUL, and DIV |
 
 ## Calculator State Machine
 
