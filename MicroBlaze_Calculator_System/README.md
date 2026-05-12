@@ -42,7 +42,7 @@ The Vivado hardware system includes:
 |---|---|
 | MicroBlaze | Soft processor running the C firmware |
 | AXI GPIO 0 | DIP switches and LEDs |
-| AXI GPIO 1 | 7-segment anodes and segment outputs |
+| AXI GPIO 1 | 7-segment anodes and segment display |
 | AXI GPIO 2 | Push-button inputs |
 | AXI UART-Lite | UART terminal communication |
 | Clock / Reset | System clock and reset logic |
