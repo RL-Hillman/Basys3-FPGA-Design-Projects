@@ -100,7 +100,7 @@ WAIT_OPERATION
   | User presses operation button
   v
 Print result to UART terminal
-
+```
 
 ## Static ELF Memory Footprint
 
@@ -117,3 +117,8 @@ After building the MicroBlaze application, the generated ELF file size was:
 ```text
 text    data    bss     dec     hex     filename
 25024   700     3244    28968   7128    microblaze_gpio.elf
+```
+
+This footprint represents the static ELF size after compilation. It does not include dynamic stack usage during runtime.
+
+The firmware avoids heavy floating-point formatted printing by using a custom `UartSendFloat3()` function instead of `printf("%.3f")`.
