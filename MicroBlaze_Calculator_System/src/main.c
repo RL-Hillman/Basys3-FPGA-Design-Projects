@@ -1,5 +1,5 @@
 /*
- * microgpio.c
+ * main.c
  *
  *  This program implements a calculator system on the Basys 3 board.
  *
