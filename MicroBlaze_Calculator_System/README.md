@@ -17,6 +17,8 @@ The calculator supports four operating modes:
 | Advanced Calculator | `SW15 = 0`, `SW0 = 1` | ADD, SUB, MUL, DIV |
 | Invalid Mode | `SW15 = 1`, `SW0 = 1` | Warning message and blinking side LEDs |
 
+The firmware was designed as a compact, resource-aware embedded application. In the final build, the generated ELF file has a static footprint of only 28,968 bytes, approximately 28.29 KiB, while still supporting GPIO control, UART-Lite communication, 7-segment display multiplexing, manual input parsing, and calculator logic.
+
 ## Project Goal
 
 The goal of this project is to demonstrate a complete FPGA-based embedded system that combines hardware design in Vivado with modular C firmware running on a MicroBlaze soft processor.
