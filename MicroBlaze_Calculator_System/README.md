@@ -6,6 +6,8 @@
 
 This project implements an embedded calculator system on the Basys3 FPGA board using a Xilinx MicroBlaze soft processor.
 
+The firmware was designed as a compact, resource-aware embedded application. 
+
 The system is controlled through board switches, push buttons, LEDs, a 4-digit 7-segment display, and UART terminal communication.
 
 The calculator supports four operating modes:
@@ -17,7 +19,6 @@ The calculator supports four operating modes:
 | Advanced Calculator | `SW15 = 0`, `SW0 = 1` | ADD, SUB, MUL, DIV |
 | Invalid Mode | `SW15 = 1`, `SW0 = 1` | Warning message and blinking side LEDs |
 
-The firmware was designed as a compact, resource-aware embedded application. 
 
 ## Project Goal
 
@@ -114,11 +115,14 @@ After building the MicroBlaze application, the generated ELF file size was:
 | `dec` | 28,968 | 28.29  | Total static size |
 | `hex` | `0x7128` | — | Total size in hexadecimal |
 
+KiB means kibibytes, where 1 KiB = 1024 bytes.
+
 ```text
 text    data    bss     dec     hex     filename
 25024   700     3244    28968   7128    microblaze_gpio.elf
 ```
+The total static footprint is only 28,968 bytes, approximately 28.29 KiB. This is compact for a MicroBlaze bare-metal application that handles GPIO control, UART-Lite communication, 7-segment multiplexing, input parsing, and calculator logic.
 
 This footprint represents the static ELF size after compilation. It does not include dynamic stack usage during runtime.
 
-The firmware avoids heavy floating-point formatted printing by using a custom `UartSendFloat3()` function instead of `printf("%.3f")`.
+
