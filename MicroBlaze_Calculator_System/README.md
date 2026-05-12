@@ -69,7 +69,7 @@ The firmware is written in C and divided into small functions for readability an
 | `ReadSwitches()` | Reads the DIP switch values |
 | `ReadSwMode()` | Extracts the mode bits from `SW15` and `SW0` |
 | `WriteLeds()` | Writes values to the board LEDs |
-| `LedPatt()` | Runs the idle-mode LED animation |
+| `LedPatt()` | Runs the menu LED animation |
 | `put7SEG()` | Writes one digit to the 7-segment display |
 | `Write7SEG()` | Displays a 4-character word using multiplexing |
 | `Decode7Seg()` | Converts characters into active-low 7-segment patterns |
