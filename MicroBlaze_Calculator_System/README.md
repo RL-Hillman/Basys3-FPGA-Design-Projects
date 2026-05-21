@@ -26,12 +26,13 @@ The goal of this project is to demonstrate a complete FPGA-based embedded system
 This project demonstrates:
 
 - MicroBlaze soft processor system design
-- AXI GPIO peripheral usage
-- UART-Lite terminal communication
+- Compact memory-aware implementation for a resource-limited FPGA system
+- AXI GPIO peripheral integration
+- Bare-metal modular C firmware
+- UART-Lite terminal communication with non-blocking input handling
 - Switch and push-button input handling
 - LED and 7-segment display control
-- Modular C firmware
-- Simple state-machine based calculator logic
+- State-machine based calculator logic
 - Manual floating-point input parsing
 
 ## Hardware Architecture
