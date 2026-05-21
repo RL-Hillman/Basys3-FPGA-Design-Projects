@@ -85,55 +85,40 @@ The firmware is written in C and organized into modular functions.
 | `simpleCalc()` | Runs Simple Calculator mode: ADD and SUB |
 | `advancedCalc()` | Runs Advanced Calculator mode: ADD, SUB, MUL, and DIV |
 
-## System State Machine
+## System Flow
 
-The system is controlled by the main loop, which continuously reads `SW15` and `SW0`, enters the selected operating mode, and returns to mode selection when the user changes the switches or exits the current calculator flow.
+The main loop continuously checks the selected mode using `SW15` and `SW0`.  
+Each calculator mode then runs its own internal input flow.
 
 ```mermaid
-stateDiagram-v2
-    [*] --> INIT
-    INIT --> MODE_SELECT: Hardware initialized
-    INIT --> INIT_ERROR: Initialization failed
+flowchart TD
+    A[Start] --> B[Initialize GPIO and UART]
+    B --> C{Read SW15 and SW0}
 
-    MODE_SELECT --> IDLE_MODE: SW15=0, SW0=0
-    MODE_SELECT --> SIMPLE_GET_X: SW15=1, SW0=0
-    MODE_SELECT --> ADV_GET_X: SW15=0, SW0=1
-    MODE_SELECT --> INVALID_MODE: SW15=1, SW0=1
+    C -->|00| D[Idle Mode<br/>Show menu and run LED pattern]
+    C -->|10| E[Simple Calculator<br/>ADD / SUB]
+    C -->|01| F[Advanced Calculator<br/>ADD / SUB / MUL / DIV]
+    C -->|11| G[Invalid Mode<br/>Blink side LEDs]
 
-    IDLE_MODE --> IDLE_MODE: LED pattern running
-    IDLE_MODE --> MODE_SELECT: Mode switches changed
+    D --> C
+    G --> C
 
-    INVALID_MODE --> INVALID_MODE: Blink side LEDs
-    INVALID_MODE --> MODE_SELECT: Switches changed from 11
+    E --> H[Enter X]
+    F --> H
 
-    SIMPLE_GET_X --> SIMPLE_GET_X: Typing X / invalid input
-    SIMPLE_GET_X --> SIMPLE_GET_Y: Valid X entered
-    SIMPLE_GET_X --> MODE_SELECT: Empty ENTER / mode changed
+    H --> I[Enter Y]
+    I --> J[Wait for button operation]
+    J --> K[Print result to UART]
+    K --> J
 
-    SIMPLE_GET_Y --> SIMPLE_GET_Y: Typing Y / invalid input
-    SIMPLE_GET_Y --> SIMPLE_WAIT_OPERATION: Valid Y entered
-    SIMPLE_GET_Y --> MODE_SELECT: Empty ENTER / mode changed
-
-    SIMPLE_WAIT_OPERATION --> SIMPLE_WAIT_OPERATION: ADD/SUB pressed, result printed
-    SIMPLE_WAIT_OPERATION --> SIMPLE_WAIT_OPERATION: MUL/DIV pressed, unavailable message
-    SIMPLE_WAIT_OPERATION --> MODE_SELECT: ENTER / mode changed
-
-    ADV_GET_X --> ADV_GET_X: Typing X / invalid input
-    ADV_GET_X --> ADV_GET_Y: Valid X entered
-    ADV_GET_X --> MODE_SELECT: Empty ENTER / mode changed
-
-    ADV_GET_Y --> ADV_GET_Y: Typing Y / invalid input
-    ADV_GET_Y --> ADV_WAIT_OPERATION: Valid Y entered
-    ADV_GET_Y --> MODE_SELECT: Empty ENTER / mode changed
-
-    ADV_WAIT_OPERATION --> ADV_WAIT_OPERATION: ADD/SUB/MUL/DIV pressed, result printed
-    ADV_WAIT_OPERATION --> ADV_WAIT_OPERATION: Division by zero detected
-    ADV_WAIT_OPERATION --> MODE_SELECT: ENTER / mode changed
-
-    INIT_ERROR --> [*]
+    H -->|Empty ENTER or mode change| C
+    I -->|Empty ENTER or mode change| C
+    J -->|ENTER or mode change| C
 ```
 
-Pressing ENTER on an empty input line exits the current calculator flow and returns control to `main()`. If the mode switches remain unchanged, the main loop can enter the same calculator mode again and start a new calculation from the first operand.
+In Simple mode, only ADD and SUB are accepted.  
+In Advanced mode, ADD, SUB, MUL, and DIV are accepted.  
+After a result is printed, the same operands remain active, so the user can press another operation button or press ENTER to restart the input flow.
 
 ## Static ELF Memory Footprint
 
