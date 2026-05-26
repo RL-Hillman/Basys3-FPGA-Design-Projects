@@ -1,7 +1,5 @@
 # FPGA_Basys3_VHDL_Projects
 
-
-
 # Real-Hardware Conversion Scaffold
 
 **Reference only — this is NOT built.** `drones.c` is the *simulation* (all state in
@@ -184,5 +182,3 @@ Even with the above scaffold, a production driver needs:
 
 So this scaffold maps the *structure* of the conversion; the datasheet + IRQ/DMA
 work would still be the bulk of a real driver.
-
-
