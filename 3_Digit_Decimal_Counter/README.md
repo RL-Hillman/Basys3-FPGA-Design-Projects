@@ -1,4 +1,4 @@
-# Basys3 3-Digit Decimal Counter System
+#  3-Digit Decimal Counter System
 
 A modular VHDL-based FPGA design implemented on the Digilent Basys3 board.
 
