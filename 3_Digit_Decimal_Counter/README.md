@@ -1,31 +1,24 @@
-# Basys3 3-Digit Decimal Counter
+# FPGA 3-Digit Decimal Counter System
 
-A modular VHDL implementation of a 3-digit decimal counter for the Digilent Basys3 FPGA board.
+A modular VHDL implementation of a 3-digit decimal counter system for the Digilent Basys3 FPGA board.
 
-The system counts from `000` up to a user-selected maximum value `NNN`, where `N` is selected using the board switches. The current value is displayed on the Basys3 7-segment display using digit multiplexing, and an LED turns on when the counter reaches the selected maximum value.
+The design counts from `000` up to a user-selected maximum value `NNN`, where `N` is selected using a 4-bit switch input. The current count is shown on a multiplexed 7-segment display, and an LED is asserted when the counter reaches the selected terminal value.
 
 ---
 
-## Project Overview
+## Project Goals
 
-This project demonstrates a complete FPGA-based digital system built from several reusable VHDL components.
+This project demonstrates a complete synchronous FPGA system built from reusable VHDL components.
 
-Main features:
+The main goals are:
 
-- 3-digit decimal counter
-- User-selectable maximum count using switches
-- Clock division from the 100 MHz Basys3 system clock
-- 7-segment display decoding
-- 7-segment display multiplexing
-- Synchronous active-high reset
-- LED indication when the counter reaches the selected maximum value
-- Modular VHDL structure with dedicated testbenches
-
-The top-level entity is:
-
-```vhdl
-main
-```
+- Design a modular 3-digit decimal counter.
+- Generate slower internal clocks from the Basys3 100 MHz clock.
+- Drive a multiplexed 7-segment display using active-low anodes.
+- Detect the terminal count value `NNN`.
+- Assert an LED when the selected maximum count is reached.
+- Verify the system using simulation testbenches.
+- Implement the design on real FPGA hardware using Vivado.
 
 ---
 
@@ -38,139 +31,146 @@ main
 | HDL | VHDL |
 | Toolchain | Xilinx Vivado |
 | Input Clock | 100 MHz |
-| Display | On-board 4-digit 7-segment display |
-| Used Display Digits | 3 digits |
-| Input | 4 switches for `top_count` |
-| Reset | Push button, synchronous active-high |
-| Output | 7-segment display and LED |
+| User Input | 4 switches for `top_count`, 1 push button for reset |
+| Output | 3 active 7-segment digits and 1 LED |
 
 ---
 
 ## System Behavior
 
-The input `top_count` is a 4-bit value connected to switches `SW0` to `SW3`.
+The input `top_count[3:0]` selects a decimal digit `N` from 0 to 9.
 
-It represents the decimal digit `N` in the range:
-
-```text
-0000 to 1001
-```
-
-Equivalent decimal range:
+The system then counts from:
 
 ```text
-0 to 9
-```
-
-The system counts from:
-
-```text
-000 → 001 → 002 → ... → NNN → 000
+000 -> 001 -> 002 -> ... -> NNN -> 000
 ```
 
 Examples:
 
 | `top_count` | Decimal N | Counter Range |
 |---|---:|---|
-| `0001` | 1 | `000 → 001 → ... → 111 → 000` |
-| `0010` | 2 | `000 → 001 → ... → 222 → 000` |
-| `0101` | 5 | `000 → 001 → ... → 555 → 000` |
-| `1001` | 9 | `000 → 001 → ... → 999 → 000` |
+| `0001` | 1 | `000 -> ... -> 111 -> 000` |
+| `0010` | 2 | `000 -> ... -> 222 -> 000` |
+| `0101` | 5 | `000 -> ... -> 555 -> 000` |
+| `1001` | 9 | `000 -> ... -> 999 -> 000` |
 
-Values above `1001` are considered invalid inputs because each counter digit is decimal and supports only values from 0 to 9.
+Only values from `0000` to `1001` are valid because each counter digit is decimal and supports values from 0 to 9.
+
+---
+
+## Top-Level Interface
+
+The top-level entity is `main`.
+
+| Signal | Direction | Description |
+|---|---|---|
+| `clk_100M` | Input | 100 MHz Basys3 system clock |
+| `reset` | Input | Synchronous active-high reset |
+| `top_count[3:0]` | Input | Selects the terminal digit `N` |
+| `seven_seg[6:0]` | Output | 7-segment cathode control signals |
+| `anode[2:0]` | Output | Active-low anode control for the three used digits |
+| `a3` | Output | Disables the unused fourth 7-segment digit |
+| `led` | Output | High when the counter reaches `NNN` |
 
 ---
 
 ## System Architecture
 
-The design is divided into independent VHDL modules and connected in the top-level file `main.vhd`.
+The design is built from several independent VHDL components connected in the top-level module.
 
 ![System Block Diagram](images/block_diagram.png)
 
-### High-Level Data Flow
-
 ```text
 100 MHz Clock
-     │
-     ▼
-Clock Divider
- ├── clk5   ─────► Decimal Counter Chain
- └── clk500 ─────► Display Anode Rotation
-
-Decimal Counter Chain ─► MUX ─► 7-Segment Decoder ─► 7-Segment Display
-
-Shift Register ─► Anode Encoder ─► MUX Select
-              └──────────────────► Active Anodes
+     |
+     v
++-------------+
+|  divider    |
++-------------+
+ |           |
+ | clk5      | clk500
+ v           v
+Counters     Shift Register
+ |           |
+ v           v
+MUX <--- Anode Encoder
+ |
+ v
+7-Segment Decoder
+ |
+ v
+7-Segment Display
 ```
+
+The architecture separates the system into two main paths:
+
+1. **Counter path** - updates the decimal value at a slow rate.
+2. **Display path** - rapidly multiplexes the active 7-segment digits.
 
 ---
 
-## Clocking
+## Component Overview
 
-The Basys3 board provides a 100 MHz input clock. The `divider` module generates two slower internal clocks.
+### 1. `divider.vhd` - Clock Divider
 
-| Clock Signal | Frequency | Purpose |
-|---|---:|---|
-| `clk5` | 5 Hz | Updates the decimal counter |
-| `clk500` | 500 Hz | Refreshes the multiplexed 7-segment display |
+The `divider` receives the 100 MHz input clock and generates two slower clock signals:
 
-The divider uses generic values representing half-period cycle counts:
+| Output Clock | Purpose |
+|---|---|
+| `clk5` | Updates the decimal counter |
+| `clk500` | Refreshes the multiplexed 7-segment display |
+
+The divider uses generic parameters that represent half-period cycle counts:
 
 ```vhdl
 CLK500_HALF_PERIOD_CYCLES : integer := 100000;
 CLK5_HALF_PERIOD_CYCLES   : integer := 10000000;
 ```
 
-Because the output clock toggles every `N` input clock cycles, the output frequency is:
+Because each output clock toggles every `N` input-clock cycles, the output frequency is:
 
 ```text
-Fout = Fin / (2 × N)
+Fout = Fin / (2 * N)
 ```
 
 For a 100 MHz input clock:
 
-```text
-100 MHz / (2 × 100,000)    = 500 Hz
-100 MHz / (2 × 10,000,000) = 5 Hz
-```
+| Output | Half-Period Count | Frequency |
+|---|---:|---:|
+| `clk500` | 100,000 | 500 Hz |
+| `clk5` | 10,000,000 | 5 Hz |
+
+#### `rdy_rst` behavior
+
+The divider includes an internal `rdy_rst` signal. Its purpose is to make the divider reset a one-time initialization event for each reset assertion.
+
+When `reset` is sampled high, the divider counters are cleared and the generated clocks are restarted from a known state. After this first reset cycle, `rdy_rst` prevents the divider from being continuously cleared every clock cycle while the reset input remains high.
+
+This keeps the divider behavior controlled and avoids repeatedly forcing the internal divider counters back to zero for the entire duration of a long reset press.
 
 ---
 
-## VHDL Modules
+### 2. `counter.vhd` - Decimal Digit Counter
 
-| File | Description |
+The `counter` module implements one decimal digit with a range of 0 to 9.
+
+Each counter has:
+
+| Signal | Purpose |
 |---|---|
-| `main.vhd` | Top-level module that connects the full system |
-| `divider.vhd` | Generates the 5 Hz and 500 Hz internal clocks |
-| `counter.vhd` | Single decimal digit counter, range 0 to 9 |
-| `Shift_REG.vhd` | Rotating shift register for active-low anode control |
-| `anode_encoder.vhd` | Converts the active anode pattern into a MUX select signal |
-| `mux4x1.vhd` | Selects which decimal digit is sent to the 7-segment decoder |
-| `Seg_decoder.vhd` | Converts a decimal digit into a 7-segment output pattern |
-| `Basys3.xdc` | Pin constraints for the Basys3 FPGA board |
+| `en` | Enables counting |
+| `clr` | Clears the digit to 0 |
+| `rst` | Synchronous reset |
+| `clk` | Counter clock |
+| `top_count` | Selected terminal digit `N` |
+| `top_cnt_reach` | High when the digit equals `N` |
+| `reach_9` | High when the digit equals 9 |
+| `q` | Current decimal digit |
 
----
+The top-level design instantiates three counters:
 
-## Component Description
-
-### 1. Clock Divider
-
-The `divider` module receives the 100 MHz board clock and generates:
-
-- `clk5` for the counter update rate
-- `clk500` for display multiplexing
-
-This allows the counter to update slowly enough to be visible while the display refreshes fast enough to appear stable.
-
----
-
-### 2. Decimal Counter Chain
-
-The `counter` module stores a single decimal digit from 0 to 9.
-
-The system instantiates three counters:
-
-| Counter | Digit |
+| Instance | Digit |
 |---|---|
 | `cnt1` | Ones digit |
 | `cnt2` | Tens digit |
@@ -178,59 +178,58 @@ The system instantiates three counters:
 
 The counters are cascaded:
 
-- The ones digit increments on every `clk5` count event.
+- The ones digit counts every `clk5` cycle.
 - The tens digit increments when the ones digit reaches 9.
 - The hundreds digit increments when both the ones and tens digits reach 9.
-- When all three digits reach the selected value `NNN`, the system returns to `000`.
+- When all three digits reach `N`, the system clears back to `000`.
 
 ---
 
-### 3. Maximum Count Detection
+### 3. Terminal Count Detection
 
-Each counter compares its current digit value with `top_count`.
-
-The top-level module combines the three comparison outputs:
+The terminal count condition is detected by checking whether all three digits reached the selected value `N`:
 
 ```vhdl
 allrchtop <= toprch3 and toprch2 and toprch1;
 ```
 
-When `allrchtop = '1'`, the counter has reached `NNN`.
-
-At this point:
+When `allrchtop = '1'`:
 
 - The LED turns on.
-- The counter is cleared back to `000` on the next counter clock event.
+- All three counters are cleared back to 0 on the next counter update.
 
----
-
-### 4. 7-Segment Display Multiplexing
-
-The Basys3 board has a 4-digit 7-segment display. This design uses three digits and disables the fourth digit.
-
-The anodes are active-low, so a `0` enables a digit and a `1` disables it.
-
-The rotating anode sequence is:
+This creates the sequence:
 
 ```text
-110 → 101 → 011 → 110 → ...
-```
-
-This means only one digit is active at a time, but the refresh rate is fast enough that the user sees all three digits continuously.
-
-The unused fourth digit is disabled by driving:
-
-```vhdl
-a3 <= '1';
+... -> NNN -> 000
 ```
 
 ---
 
-### 5. Anode Encoder and MUX
+### 4. `Shift_REG.vhd` - Anode Rotation Register
 
-The `anode_encoder` converts the active anode pattern into a 2-bit selector.
+The Basys3 7-segment display uses active-low anodes, meaning:
 
-The selector controls the `mux4x1` module, which chooses which digit is currently sent to the 7-segment decoder.
+```text
+0 = digit enabled
+1 = digit disabled
+```
+
+The system uses only three of the four display digits. The shift register generates a rotating 3-bit anode pattern:
+
+```text
+110 -> 101 -> 011 -> 110 -> ...
+```
+
+This pattern activates one digit at a time and allows the system to multiplex the display.
+
+The shift register is clocked by `clk500`, so the active display digit changes fast enough to appear stable to the human eye.
+
+---
+
+### 5. `anode_encoder.vhd` - Anode-to-MUX Selector
+
+The `anode_encoder` converts the active anode pattern into a 2-bit selector used by the digit MUX.
 
 | Active Anode Pattern | Selected Digit |
 |---|---|
@@ -238,79 +237,89 @@ The selector controls the `mux4x1` module, which chooses which digit is currentl
 | `101` | Tens digit |
 | `011` | Hundreds digit |
 
+This connects the display scanning logic to the digit-selection logic.
+
 ---
 
-### 6. 7-Segment Decoder
+### 6. `mux4x1.vhd` - Digit Multiplexer
 
-The `Seg_decoder` module converts a decimal digit into the correct 7-segment pattern.
+The `mux4x1` selects which decimal digit is currently sent to the 7-segment decoder.
 
-The segment outputs are active-low:
+Inputs:
+
+- `q1` - ones digit
+- `q2` - tens digit
+- `q3` - hundreds digit
+
+The selector comes from the `anode_encoder`, so the displayed digit always matches the currently active anode.
+
+This is the core mechanism that allows three different digits to share one 7-segment decoder.
+
+---
+
+### 7. `Seg_decoder.vhd` - 7-Segment Decoder
+
+The `Seg_decoder` converts the selected decimal digit into the correct 7-segment cathode pattern.
+
+The Basys3 7-segment cathodes are active-low:
 
 ```text
 0 = segment ON
 1 = segment OFF
 ```
 
-The output vector controls the Basys3 cathode signals for the 7-segment display.
+Therefore, each decimal digit is mapped to a 7-bit active-low segment pattern.
+
+---
+
+### 8. `a3` - Unused Fourth Digit Disable
+
+The Basys3 board has four 7-segment digits, but this design uses only three.
+
+The unused fourth digit is disabled by driving its anode high:
+
+```vhdl
+a3 <= '1';
+```
+
+Since the anodes are active-low, this keeps the fourth digit off.
 
 ---
 
 ## LED Behavior
 
-The LED output is high only when the counter reaches the selected maximum value `NNN`.
+The LED is used as a terminal-count indicator.
+
+It is asserted only when the counter reaches the selected maximum value `NNN`.
 
 Example:
 
 ```text
-top_count = 0010
+top_count = 0001
 ```
 
-In this case, the selected maximum value is:
+The LED turns on when the counter reaches:
 
 ```text
-222
+111
 ```
 
-The LED turns on when the displayed count reaches `222`. On the next counter update, the counter returns to `000` and the LED turns off.
-
----
-
-## Pin Mapping
-
-The exact pin assignments are defined in:
-
-```text
-constraints/Basys3.xdc
-```
-
-Main external connections:
-
-| Top-Level Signal | Basys3 Peripheral |
-|---|---|
-| `clk_100M` | 100 MHz board clock |
-| `reset` | Push button |
-| `top_count[3:0]` | Switches SW0-SW3 |
-| `seven_seg[6:0]` | 7-segment cathode signals |
-| `anode[2:0]` | Three active 7-segment anodes |
-| `a3` | Disabled fourth 7-segment anode |
-| `led` | On-board LED |
+On the next counter update, the counter clears back to `000` and the LED turns off.
 
 ---
 
 ## Simulation
 
-The project includes testbenches for the complete system and for individual modules.
+The project includes testbenches for both the full system and individual components.
 
 | Testbench | Purpose |
 |---|---|
 | `tb_main.vhd` | Full-system simulation |
-| `tb_div.vhd` | Clock divider simulation |
-| `tb_counter.vhd` | Single decimal counter simulation |
-| `tb_Shift_REG.vhd` | Anode rotation simulation |
+| `tb_div.vhd` | Clock divider verification |
+| `tb_counter.vhd` | Single digit counter verification |
+| `tb_Shift_REG.vhd` | Anode rotation verification |
 
-For simulation, the clock divider generic values are reduced so the behavior can be observed quickly.
-
-Example from `tb_main.vhd`:
+For simulation, the divider generics are reduced so the behavior can be observed quickly:
 
 ```vhdl
 generic map (
@@ -319,23 +328,31 @@ generic map (
 )
 ```
 
-This makes the internal clocks much faster during simulation while keeping the same logical behavior.
+With a 10 ns simulation clock period:
+
+| Signal | Toggle Interval | Full Period |
+|---|---:|---:|
+| `clk500` | 20 ns | 40 ns |
+| `clk5` | 50 ns | 100 ns |
+
+This makes it easy to verify the counter and multiplexing behavior in a short simulation window.
 
 ---
 
 ## Simulation Result
 
-The waveform below shows the top-level system simulation.
-
-It demonstrates:
-
-- Synchronous reset behavior
-- Counter progression
-- 7-segment output changes
-- Anode multiplexing
-- LED assertion when the counter reaches `NNN`
+The waveform below shows the full system operating with `top_count = 1`.
 
 ![Simulation Waveform](images/waveform.png)
+
+The simulation demonstrates:
+
+- The clock divider generates separate counter and display clocks.
+- The counter reaches `111` when `top_count = 1`.
+- The LED is asserted at the terminal count.
+- The counter clears back to `000` after reaching the terminal value.
+- The anode pattern continues rotating for 7-segment multiplexing.
+- The selected digit is decoded and sent to the 7-segment output.
 
 ---
 
@@ -366,21 +383,21 @@ It demonstrates:
 
 ---
 
-## How to Run in Vivado
+## How to Run
 
-### 1. Create a New Vivado Project
+### 1. Create a Vivado Project
 
-Create a new RTL project and select the Digilent Basys3 board or the matching Artix-7 FPGA device.
+Create a new RTL project in Xilinx Vivado and select the Basys3 board or the matching Artix-7 device.
 
 ### 2. Add Design Sources
 
-Add all VHDL files from:
+Add all VHDL source files from:
 
 ```text
 src/
 ```
 
-Set `main.vhd` as the top-level design.
+Set `main.vhd` as the top-level module.
 
 ### 3. Add Constraints
 
@@ -390,9 +407,9 @@ Add the Basys3 constraints file:
 constraints/Basys3.xdc
 ```
 
-### 4. Run Behavioral Simulation
+### 4. Run Simulation
 
-Add the simulation files from:
+Add the testbench files from:
 
 ```text
 sim/
@@ -404,29 +421,25 @@ Run behavioral simulation using:
 tb_main.vhd
 ```
 
-### 5. Run Synthesis and Implementation
+### 5. Generate Bitstream
 
-Run the Vivado flow:
-
-```text
-Synthesis → Implementation → Generate Bitstream
-```
+Run synthesis, implementation, and bitstream generation.
 
 ### 6. Program the FPGA
 
-Connect the Basys3 board, open Hardware Manager, and program the FPGA with the generated bitstream.
+Connect the Basys3 board and program it using Vivado Hardware Manager.
 
 ---
 
 ## Design Notes
 
 - The design uses a synchronous active-high reset.
-- The 7-segment display signals are active-low.
-- The anode signals are active-low.
-- Only three of the four Basys3 7-segment digits are used.
-- The fourth digit is disabled using `a3 <= '1'`.
-- Valid `top_count` values are from `0000` to `1001`, representing decimal values 0 to 9.
-- The project is organized as a modular FPGA design, making each component easy to test and reuse.
+- The display anodes are active-low.
+- The segment outputs are active-low.
+- Only three of the four 7-segment digits are used.
+- `top_count` should be set between 0 and 9.
+- The design is modular and each major function is separated into its own VHDL component.
+- Simulation uses reduced divider values, while hardware uses the real divider values for 5 Hz and 500 Hz operation.
 
 ---
 
@@ -434,20 +447,20 @@ Connect the Basys3 board, open Hardware Manager, and program the FPGA with the g
 
 This project demonstrates:
 
-- VHDL-based RTL design
-- Modular FPGA system architecture
+- Modular VHDL design
+- FPGA system integration
 - Synchronous digital design
 - Clock division
 - Cascaded decimal counters
+- Terminal-count detection
 - 7-segment display decoding
 - Display multiplexing
 - Testbench-based verification
 - Vivado simulation and implementation flow
-- Basys3 FPGA hardware integration
+- Basys3 hardware constraint mapping
 
 ---
 
 ## License
 
 This project is intended for educational and portfolio purposes.
-
