@@ -52,7 +52,7 @@ The divider uses generic parameters, allowing the same source code to support bo
 
 ### Dynamic 7-Segment Display Multiplexing
 
-The display system uses a rotating active-low anode pattern, a digit multiplexer, and a 7-segment decoder. Together, these components allow three decimal digits to share one 7-segment output bus while still appearing as a stable multi-digit display.
+The display system uses a rotating active-low anode pattern, an anode encoder, a digit multiplexer, and a 7-segment decoder. Together, these components allow three decimal digits to share one 7-segment output bus while still appearing as a stable multi-digit display.
 
 ### Configurable Terminal Count
 
