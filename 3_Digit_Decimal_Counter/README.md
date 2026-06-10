@@ -1,10 +1,10 @@
 #  3-Digit Decimal Counter System
 
-A modular VHDL-based FPGA design implemented on the Digilent Basys3 board.
+A modular VHDL-based FPGA design implemented on an Basys3 board.
 
 This project implements a configurable 3-digit decimal counter that counts from `000` up to `NNN`, where `N` is selected using the onboard switches. The current value is displayed on a multiplexed 7-segment display, and an LED is asserted when the counter reaches the selected terminal value.
 
-The design is built as a structured digital system composed of multiple reusable VHDL components, including clock division, cascaded decimal counters, display multiplexing, anode control, digit selection, and 7-segment decoding.
+The design is built as a structured digital system composed of multiple VHDL components, including clock division, cascaded decimal counters, display multiplexing, anode control, digit selection, and 7-segment decoding.
 
 ---
 
