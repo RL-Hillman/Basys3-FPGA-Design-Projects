@@ -566,6 +566,3 @@ The final system combines timing generation, cascaded decimal counting, terminal
 
 ---
 
-## License
-
-This project is intended for educational and portfolio use.
