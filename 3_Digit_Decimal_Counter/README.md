@@ -256,7 +256,7 @@ The top-level system uses three instances of this module:
 | `cnt2` | Tens digit |
 | `cnt3` | Hundreds digit |
 
-Using the same counter block for all three digit positions keeps the design consistent and avoids duplicating counter logic.
+Using the same counter block for all three digit positions keeps the design consistent.
 
 ---
 
