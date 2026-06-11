@@ -503,20 +503,6 @@ The `Basys3.xdc` file maps the top-level VHDL ports to the physical Basys3 board
 ---
 
 
-## Design Notes
-
-- The design is built from multiple reusable VHDL components.
-- The same `counter` component is instantiated three times to create the 3-digit decimal counter.
-- The counter path and display path are separated at the architectural level.
-- The display is driven using time-multiplexing and active-low anode control.
-- The segment outputs are active-low.
-- The fourth 7-segment digit is disabled using `a3`.
-- `top_count` should be set to a value from 0 to 9.
-- Simulation uses reduced divider values to verify the system quickly without simulating millions of 100 MHz clock cycles.
-- Hardware uses the full divider values for 5 Hz counting and 500 Hz display refresh.
-
----
-
 ## Summary
 
 This project presents a complete FPGA-based digital system built around modular VHDL components, synchronous control logic, parameterized clock generation, dynamic 7-segment display multiplexing, and Basys3 board-level integration.
