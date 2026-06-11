@@ -502,7 +502,6 @@ The `Basys3.xdc` file maps the top-level VHDL ports to the physical Basys3 board
 
 ---
 
-
 ## Summary
 
 This project presents a complete FPGA-based digital system built around modular VHDL components, synchronous control logic, parameterized clock generation, dynamic 7-segment display multiplexing, and Basys3 board-level integration.
