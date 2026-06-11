@@ -526,6 +526,24 @@ Add the constraints file:
 constraints/Basys3.xdc
 ```
 
+### 4. Run Behavioral Simulation
+
+Add the testbench files from the `sim/` directory and run behavioral simulation using:
+
+```text
+tb_main.vhd
+```
+
+### 5. Generate Bitstream
+
+Run synthesis, implementation, and bitstream generation.
+
+### 6. Program the FPGA
+
+Connect the Basys3 board and program it using Vivado Hardware Manager.
+
+---
+
 ## Summary
 
 This project presents a complete FPGA-based digital system built around modular VHDL components, synchronous control logic, parameterized clock generation, dynamic 7-segment display multiplexing, and Basys3 board-level integration.
