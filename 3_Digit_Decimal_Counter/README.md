@@ -502,6 +502,30 @@ The `Basys3.xdc` file maps the top-level VHDL ports to the physical Basys3 board
 
 ---
 
+## How to Run
+
+### 1. Create a Vivado Project
+
+Create a new RTL project in Xilinx Vivado and select the Digilent Basys3 board or the matching Artix-7 device.
+
+### 2. Add Design Sources
+
+Add all VHDL files from the `src/` directory.
+
+Set the top-level entity to:
+
+```text
+main
+```
+
+### 3. Add Constraints
+
+Add the constraints file:
+
+```text
+constraints/Basys3.xdc
+```
+
 ## Summary
 
 This project presents a complete FPGA-based digital system built around modular VHDL components, synchronous control logic, parameterized clock generation, dynamic 7-segment display multiplexing, and Basys3 board-level integration.
