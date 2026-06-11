@@ -1,5 +1,7 @@
 # 3-Digit Multiplexed 7-Segment Counter 
-
+![VHDL](https://img.shields.io/badge/Language-VHDL-blue.svg)
+![Platform](https://img.shields.io/badge/Platform-Basys3-orange.svg)
+![Toolchain](https://img.shields.io/badge/Toolchain-Xilinx_Vivado-red.svg)
 A modular FPGA-based digital system written in VHDL for the Digilent Basys3 board.
 
 The project implements a configurable 3-digit decimal counter that counts from `000` up to a user-selected terminal value `NNN`, where `N` is selected using the onboard switches. The current count is displayed on three multiplexed 7-segment digits, and an LED is asserted when the selected terminal count is reached.
