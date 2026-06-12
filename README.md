@@ -95,7 +95,7 @@ The design is built from several VHDL components connected by the top-level `mai
 
 | Component | Purpose | Design Role |
 |---|---|---|
-| `main.vhd` | Top-level integration | Connects all modules, handles terminal-count detection, counter clearing, LED control, and disables the unused fourth digit |
+| `main.vhd` | Top-level integration | Connects all modules, handles terminal-count detection, counter clearing and LED control. |
 | `divider.vhd` | Clock generation | Divides the 100 MHz board clock into `clk5` for counting and `clk500` for display refresh |
 | `counter.vhd` | Decimal digit counter | Implements one digit from 0 to 9 and outputs status flags for carry and terminal-count detection |
 | `Shift_REG.vhd` | Anode rotation | Generates the rotating active-low anode sequence used for display multiplexing |
