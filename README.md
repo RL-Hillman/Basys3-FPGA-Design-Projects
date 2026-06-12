@@ -130,47 +130,6 @@ flowchart TD
     K --> L[7-Segment Display]
 ```
 
-## Counter and Display Logic
-
-The three decimal counters are connected as a cascaded counting system.
-
-| Logic | Purpose |
-|---|---|
-| Ones digit always enabled | Advances the least significant digit every counter clock |
-| Tens enabled when ones reaches 9 | Creates decimal carry from ones to tens |
-| Hundreds enabled when ones and tens reach 9 | Creates decimal carry into the hundreds digit |
-| `allrchtop` detection | Detects when all three digits equal `top_count` |
-| LED assertion | Turns on the LED at the selected terminal count |
-| Clear logic | Returns the system to `000` after reaching `NNN` |
-| Anode rotation | Selects which physical 7-segment digit is active |
-| Digit multiplexing | Routes the matching digit value to the decoder |
-| 7-segment decoding | Converts the selected digit into active-low segment outputs |
-
-Key control signals:
-
-```vhdl
-en2 <= '1' when rch91 = '1' else '0';
-
-en3 <= '1' when rch92 = '1' and rch91 = '1' else '0';
-
-allrchtop <= toprch3 and toprch2 and toprch1;
-
-led <= '1' when allrchtop = '1' else '0';
-```
-
-The Basys3 display uses active-low anodes and active-low segment signals:
-
-```text
-0 = ON
-1 = OFF
-```
-
-The design uses three of the four display digits. The unused fourth digit is disabled by the top-level signal:
-
-```vhdl
-a3 <= '1';
-```
-
 ## Simulation and Verification
 
 The project includes VHDL testbenches for the full system and selected internal modules.
