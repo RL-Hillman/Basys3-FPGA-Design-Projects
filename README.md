@@ -17,19 +17,17 @@ The goal of this project is to build a clean FPGA-based counter and display syst
 The project includes:
 
 - Modular VHDL hardware architecture
-- Reusable decimal counter component
-- Three-digit cascaded decimal counting
+- Three digit cascaded decimal counting
 - Parameterized clock division
 - Dynamic 7-segment display multiplexing
-- Active-low anode and segment control
-- User-selectable terminal count using switches
-- LED terminal-count indication
-- Top-level and component-level simulation
+- User selectable terminal count using switches
+- LED terminal count indication
+- Top level and component level simulation
 - Basys3 hardware pin mapping using an XDC constraints file
 
 ## System Behavior
 
-The `top_count` input is a 4-bit switch-controlled value representing the decimal digit `N`.
+The `top_count` input is a 4-bit switch controlled value representing the decimal digit `N`.
 
 Valid range:
 
