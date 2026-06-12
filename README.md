@@ -104,6 +104,7 @@ The design is built from several VHDL components connected by the top-level `mai
 | `Seg_decoder.vhd` | Display decoding | Converts the selected decimal digit into the active-low 7-segment output pattern |
 | `Basys3.xdc` | FPGA constraints | Maps the top-level VHDL ports to the physical Basys3 board pins |
 
+
 ## System Flow
 
 The system continuously updates the decimal counter and refreshes the display in parallel.
