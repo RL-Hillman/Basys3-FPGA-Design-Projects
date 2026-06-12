@@ -17,6 +17,7 @@ The goal of this project is to build a clean FPGA-based counter and display syst
 The project includes:
 
 - Modular VHDL hardware architecture
+- Reusable decimal counter component
 - Three-digit cascaded decimal counting
 - Parameterized clock division
 - Dynamic 7-segment display multiplexing
@@ -28,7 +29,7 @@ The project includes:
 
 ## System Behavior
 
-The `top_count` input is a 4-bit switch controlled value representing the decimal digit `N`.
+The `top_count` input is a 4-bit switch-controlled value representing the decimal digit `N`.
 
 Valid range:
 
@@ -61,21 +62,6 @@ When all three digits match the selected value `N`, the LED is asserted. On the 
 
 If `top_count` is set above 9, the system continues operating as a decimal counter, but the terminal-count LED is not asserted because values above 9 cannot be reached by a single decimal digit.
 
-## Hardware Architecture
-
-The FPGA system includes:
-
-| Module | Purpose |
-|---|---|
-| `main.vhd` | Top-level module connecting all components and control logic |
-| `divider.vhd` | Generates the internal 5 Hz and 500 Hz timing signals |
-| `counter.vhd` | Reusable single-digit decimal counter |
-| `Shift_REG.vhd` | Rotates the active-low anode pattern for display multiplexing |
-| `anode_encoder.vhd` | Converts the active anode pattern into a MUX select signal |
-| `mux4x1.vhd` | Selects which digit is currently sent to the 7-segment decoder |
-| `Seg_decoder.vhd` | Converts a decimal digit into an active-low 7-segment pattern |
-| `Basys3.xdc` | Maps the top-level ports to the Basys3 FPGA pins |
-
 ## Hardware Platform
 
 | Item | Description |
@@ -105,17 +91,20 @@ The system is divided into two main paths:
 
 The counter path runs at a slow visible rate, while the display path refreshes faster to create a stable multiplexed display.
 
-## Component Structure
+## VHDL Module Structure
 
-| Component | Main Role | Design Notes |
+The design is built from several dedicated VHDL components connected by the top-level `main.vhd` module.
+
+| Component | Purpose | Design Role |
 |---|---|---|
-| `main` | Top-level integration | Connects all modules, controls counter clearing, LED output, and disables the unused fourth display digit |
-| `divider` | Clock generation | Divides the 100 MHz clock into `clk5` for counting and `clk500` for display refresh |
-| `counter` | Decimal digit counter | Counts from 0 to 9 and outputs status flags for carry and terminal-count detection |
-| `Shift_REG` | Anode rotation | Generates the rotating active-low pattern `110 → 101 → 011` |
-| `anode_encoder` | Digit selection encoding | Converts the active anode value into a 2-bit MUX selector |
-| `mux4x1` | Digit routing | Selects between ones, tens, and hundreds digits |
-| `Seg_decoder` | Display decoding | Converts a decimal digit into the required active-low 7-segment output pattern |
+| `main.vhd` | Top-level integration | Connects all modules, handles terminal-count detection, counter clearing, LED control, and disables the unused fourth digit |
+| `divider.vhd` | Clock generation | Divides the 100 MHz board clock into `clk5` for counting and `clk500` for display refresh |
+| `counter.vhd` | Decimal digit counter | Implements one digit from 0 to 9 and outputs status flags for carry and terminal-count detection |
+| `Shift_REG.vhd` | Anode rotation | Generates the rotating active-low anode sequence used for display multiplexing |
+| `anode_encoder.vhd` | Digit selection encoding | Converts the active anode pattern into a 2-bit selector for the digit multiplexer |
+| `mux4x1.vhd` | Digit routing | Selects the ones, tens, or hundreds digit according to the active display position |
+| `Seg_decoder.vhd` | Display decoding | Converts the selected decimal digit into the active-low 7-segment output pattern |
+| `Basys3.xdc` | FPGA constraints | Maps the top-level VHDL ports to the physical Basys3 board pins |
 
 ## Clocking
 
@@ -164,7 +153,7 @@ flowchart TD
     K --> L[7-Segment Display]
 ```
 
-## Counter Control Logic
+## Counter and Display Logic
 
 The three decimal counters are connected as a cascaded counting system.
 
@@ -176,6 +165,9 @@ The three decimal counters are connected as a cascaded counting system.
 | `allrchtop` detection | Detects when all three digits equal `top_count` |
 | LED assertion | Turns on the LED at the selected terminal count |
 | Clear logic | Returns the system to `000` after reaching `NNN` |
+| Anode rotation | Selects which physical 7-segment digit is active |
+| Digit multiplexing | Routes the matching digit value to the decoder |
+| 7-segment decoding | Converts the selected digit into active-low segment outputs |
 
 Key control signals:
 
@@ -189,9 +181,7 @@ allrchtop <= toprch3 and toprch2 and toprch1;
 led <= '1' when allrchtop = '1' else '0';
 ```
 
-## Display Multiplexing
-
-The Basys3 display is controlled using active-low anodes and active-low segment signals.
+The Basys3 display uses active-low anodes and active-low segment signals:
 
 ```text
 0 = ON
@@ -203,14 +193,6 @@ The design uses three of the four display digits. The unused fourth digit is dis
 ```vhdl
 a3 <= '1';
 ```
-
-The display path works as follows:
-
-```text
-Shift_REG → anode_encoder → mux4x1 → Seg_decoder → seven_seg
-```
-
-At each refresh step, one anode is activated, the matching digit is selected, and the correct segment pattern is sent to the display.
 
 ## Simulation and Verification
 
