@@ -161,7 +161,7 @@ These shortened values make it possible to verify the counter and display behavi
 ## Simulation Result
 
 <p align="center">
-  <img src="images/Simulation_Waveform.png" width="850" alt="Top-Level Simulation Waveform">
+  <img src="images/Simulation_Waveform.png" width="1200" alt="Top-Level Simulation Waveform">
 </p>
 
 In this simulation, `top_count` is set to `1`, so the selected terminal value is:
