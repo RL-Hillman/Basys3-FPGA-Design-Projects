@@ -17,7 +17,6 @@ The goal of this project is to build a clean FPGA-based counter and display syst
 The project includes:
 
 - Modular VHDL hardware architecture
-- Reusable decimal counter component
 - Three-digit cascaded decimal counting
 - Parameterized clock division
 - Dynamic 7-segment display multiplexing
