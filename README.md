@@ -28,7 +28,7 @@ The project includes:
 
 ## System Behavior
 
-The `top_count` input is a 4-bit switch-controlled value representing the decimal digit `N`.
+The `top_count` input is a 4-bit switch controlled value representing the decimal digit `N`.
 
 Valid range:
 
