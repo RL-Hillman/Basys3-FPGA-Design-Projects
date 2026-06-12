@@ -65,7 +65,7 @@ If `top_count` is set above 9, the system continues operating as a decimal count
 
 The FPGA system includes:
 
-| Module / Signal | Purpose |
+| Module | Purpose |
 |---|---|
 | `main.vhd` | Top-level module connecting all components and control logic |
 | `divider.vhd` | Generates the internal 5 Hz and 500 Hz timing signals |
