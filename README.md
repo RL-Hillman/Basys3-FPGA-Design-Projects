@@ -104,27 +104,6 @@ The design is built from several VHDL components connected by the top-level `mai
 | `Seg_decoder.vhd` | Display decoding | Converts the selected decimal digit into the active-low 7-segment output pattern |
 | `Basys3.xdc` | FPGA constraints | Maps the top-level VHDL ports to the physical Basys3 board pins |
 
-## Clocking
-
-The clock divider receives the 100 MHz Basys3 clock and generates two internal clocks:
-
-| Signal | Frequency | Purpose |
-|---|---:|---|
-| `clk5` | 5 Hz | Counter update rate |
-| `clk500` | 500 Hz | Display multiplexing refresh rate |
-
-The divider uses generic half-period cycle counts:
-
-```vhdl
-clk500Hz : integer := 100000;
-clk5Hz   : integer := 10000000;
-```
-
-The output frequency is calculated as:
-
-```text
-Fout = Fin / (2 × N)
-```
 
 The divider also uses an internal `rdy_rst` signal. This signal prevents the divider from being continuously cleared while the reset input remains high. Instead, the divider restarts from a known state once and then continues running in a controlled way.
 
@@ -242,20 +221,6 @@ The waveform shows:
 - Counter clearing back to `000`
 - Continuous anode rotation for display multiplexing
 - Correct coordination between digit selection and 7-segment output updates
-
-## FPGA Pin Mapping
-
-The `Basys3.xdc` file maps the top-level VHDL ports to the physical Basys3 board pins.
-
-| Top-Level Signal | Basys3 Peripheral |
-|---|---|
-| `clk_100M` | 100 MHz onboard clock |
-| `reset` | Push button |
-| `top_count[3:0]` | Switches SW0–SW3 |
-| `seven_seg[6:0]` | 7-segment cathode signals |
-| `anode[2:0]` | Three active display anodes |
-| `a3` | Disabled fourth anode |
-| `led` | Onboard LED |
 
 ## Repository Structure
 
