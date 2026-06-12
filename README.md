@@ -104,9 +104,6 @@ The design is built from several VHDL components connected by the top-level `mai
 | `Seg_decoder.vhd` | Display decoding | Converts the selected decimal digit into the active-low 7-segment output pattern |
 | `Basys3.xdc` | FPGA constraints | Maps the top-level VHDL ports to the physical Basys3 board pins |
 
-
-The divider also uses an internal `rdy_rst` signal. This signal prevents the divider from being continuously cleared while the reset input remains high. Instead, the divider restarts from a known state once and then continues running in a controlled way.
-
 ## System Flow
 
 The system continuously updates the decimal counter and refreshes the display in parallel.
