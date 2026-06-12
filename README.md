@@ -91,7 +91,7 @@ The counter path runs at a slow visible rate, while the display path refreshes f
 
 ## VHDL Module Structure
 
-The design is built from several dedicated VHDL components connected by the top-level `main.vhd` module.
+The design is built from several VHDL components connected by the top-level `main.vhd` module.
 
 | Component | Purpose | Design Role |
 |---|---|---|
