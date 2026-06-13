@@ -329,48 +329,6 @@ The waveform verifies:
 - The final LED output matches the bit-reversed switch input
 - All 16 possible 4-bit input combinations are tested
 
-## Basys3 Constraints
-
-The physical Basys3 board connections are defined in `Basys3.xdc`.
-
-| Top-Level Signal | Basys3 Resource |
-|---|---|
-| `clk` | 100 MHz onboard clock |
-| `rst` | Push button reset |
-| `sw[3:0]` | First four physical switches |
-| `led[3:0]` | First four physical LEDs |
-
-The 100 MHz clock is constrained using:
-
-```tcl
-create_clock -period 10.000 -name clk100 [get_ports clk]
-```
-
-This allows Vivado to perform timing analysis using the correct clock period.
-
-## Simulation Version vs Hardware Version
-
-Two generated program memory files are included:
-
-| File | Purpose |
-|---|---|
-| `PicoBlaze_Debounce.vhd` | Hardware version with a longer debounce delay |
-| `PicoBlaze_Debounce_tst.vhd` | Simulation version with a shorter delay |
-
-The simulation version exists because a real debounce delay would make behavioral simulation unnecessarily long.
-
-For hardware implementation, use:
-
-```vhdl
-program_memory_inst : entity work.PicoBlaze_Debounce
-```
-
-For fast simulation, use:
-
-```vhdl
-program_memory_inst : entity work.PicoBlaze_Debounce_tst
-```
-
 ## PicoBlaze Microcontroller vs Pure FPGA Logic
 
 This debounce task could be implemented entirely in VHDL, but PicoBlaze provides a useful hardware/software design tradeoff.
