@@ -170,14 +170,12 @@ The `bram_enable` signal enables the memory access, and `clk` synchronizes the R
 
 `PicoBlaze_Debounce_tst.vhd` is a simulation version of the generated program memory.
 
-Both `PicoBlaze_Debounce.vhd` and `PicoBlaze_Debounce_tst.vhd` are generated VHDL ROM files created from PicoBlaze assembly firmware. The main difference between them is the debounce delay value used in the firmware before ROM generation.
+Both `PicoBlaze_Debounce.vhd` and `PicoBlaze_Debounce_tst.vhd` are generated VHDL ROM files created from the PicoBlaze assembly firmware. They implement the same debounce logic, but `PicoBlaze_Debounce_tst.vhd` uses a shorter delay value to avoid waiting for the full hardware debounce timing during simulation.
 
 | Program Memory File | Purpose | Delay Setting |
 |---|---|---|
 | `PicoBlaze_Debounce.vhd` | Hardware implementation | Uses the larger hardware delay value, `theDelay = 0x64`, which is approximately 40 ms per delay-loop interval |
 | `PicoBlaze_Debounce_tst.vhd` | Fast Vivado simulation | Uses the smaller simulation delay value, `theDelay = 0x02`, which is approximately 320 ns per delay-loop interval  |
-
-The shorter delay in `PicoBlaze_Debounce_tst.vhd` preserves the same debounce logic, but avoids waiting for the full hardware debounce timing during simulation.
 
 For hardware implementation, use:
 
