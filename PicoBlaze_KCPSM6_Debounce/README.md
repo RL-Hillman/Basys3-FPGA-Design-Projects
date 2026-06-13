@@ -355,8 +355,6 @@ In this project, debounce is a good fit for PicoBlaze because it is a sequential
 
 ## Repository Structure
 
-## Repository Structure
-
 ```text
 PicoBlaze_KCPSM6_Debounce/
 │
