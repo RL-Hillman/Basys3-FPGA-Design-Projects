@@ -298,6 +298,26 @@ The firmware performs the following sequence:
 
 This approach filters mechanical switch bouncing by requiring the input value to remain stable across multiple consecutive samples.
 
+### Debounce Configuration
+
+The debounce algorithm is based on repeated sampling and comparison.
+
+In this implementation, the firmware collects **20 consecutive samples** from the switch input and stores them in PicoBlaze scratchpad memory. The first sample is used as the reference value, and the remaining **19 samples** are compared against it.
+
+If all samples are equal, the input is accepted as a stable debounced value.  
+If any sample is different, the debounce process restarts and a new set of samples is collected.
+
+| Parameter | Value | Meaning |
+|---|---|---|
+| Number of samples | 20 | Total switch samples collected for one debounce check |
+| Compared samples | 19 | Samples compared against the first reference sample |
+| Delay source | `theDelay` constant | Controls the time between samples |
+| Simulation delay | Small `theDelay` value | Used to make Vivado simulation run faster |
+| Hardware delay | Larger `theDelay` value | Used to create a realistic debounce delay on the FPGA |
+
+The delay is implemented using nested software loops in PicoBlaze assembly.  
+This makes the debounce timing easy to adjust by changing the `theDelay` constant in the firmware.
+
 ## pBlazIDE Firmware Verification
 
 Before integrating the firmware into Vivado, the PicoBlaze assembly code was imported into **pBlazIDE** for testing and verification.
