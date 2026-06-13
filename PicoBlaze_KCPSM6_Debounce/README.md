@@ -131,7 +131,7 @@ The KCPSM6 processor communicates through two main interfaces:
 2. An 8-bit I/O port interface used to communicate with external FPGA logic
 
 <p align="center">
-  <img src="docs/images/kcpsm6_block_diagram.png" width="850" alt="KCPSM6 PicoBlaze Block Diagram">
+  <img src="docs/images/kcpsm6_block_diagram.png" width="500" alt="KCPSM6 PicoBlaze Block Diagram">
 </p>
 
 KCPSM6 interface signals connected in this project:
