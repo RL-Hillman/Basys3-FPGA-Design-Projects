@@ -1,0 +1,359 @@
+; ============================================================
+; File Name   : TB_PicoBlaze_Debounce.psm
+; Project     : PicoBlaze KCPSM6 Debounce System
+; Description : Reads a 4-bit switch value, performs software
+; debouncing using 20 samples stored in scratchpad
+; RAM, reverses the bit order, and writes the
+; result to the LEDs.
+; 
+; Target      : PicoBlaze KCPSM6
+; Clock       : 100 MHz
+; 
+; Author      : Harel Hillman
+; ============================================================
+
+
+
+; ============================================================
+; Port Definitions
+; ============================================================
+
+port_in             EQU       0
+port_out            EQU       1
+
+switches            DSIN      0
+leds                DSOUT     1
+
+
+; ============================================================
+; Debounce Configuration
+; ============================================================
+; 20 decimal = 14 hex
+; 19 decimal = 13 hex
+; ============================================================
+
+sample_count_20     EQU       20
+sample_count_19     EQU       19
+scratch_start_addr  EQU       0
+
+
+; ============================================================
+; Delay Configuration
+; ============================================================
+; Clock frequency: 100 MHz
+; Clock period   : 10 ns
+; 
+; PicoBlaze instructions execute in 2 clock cycles.
+; One instruction therefore takes approximately:
+; 2 * 10 ns = 20 ns
+; 
+; The inner loop contains approximately two instructions:
+; SUB + JUMP
+; 
+; Therefore, one inner-loop iteration takes approximately:
+; 2 instructions * 20 ns = 40 ns
+; 
+; Simplified delay model:
+; T_delay ≈ theDelay^3 * 40 ns
+; 
+; For T_delay ≈ 40 ms:
+; theDelay^3 = 40 ms / 40 ns = 1,000,000
+; theDelay ≈ 100 decimal = 64 hex
+; 
+; For simulation, use a smaller value such as 02.
+; For real hardware debounce close to 40 ms, use 64.
+; ============================================================
+
+theDelay            EQU       2                   ; Simulation value. Use 64 for about 40 ms.
+
+
+; ============================================================
+; Register Naming
+; ============================================================
+
+input_value         EQU       s0
+stable_value        EQU       s1
+compare_value       EQU       s2
+output_value        EQU       s3
+sample_addr         EQU       s4
+sample_counter      EQU       s5
+
+delay_count_outer   EQU       sA
+delay_count_middle  EQU       sB
+delay_count_inner   EQU       sC
+
+
+; ============================================================
+; Reset Vector
+; ============================================================
+
+                    ORG       0
+
+main: 
+                    CALL      init
+                    JUMP      start
+
+
+; ============================================================
+; init
+; ------------------------------------------------------------
+; Initializes internal software registers and clears the
+; scratchpad RAM area used by the debounce algorithm.
+; ============================================================
+
+                    ORG       32
+
+init: 
+                    LOAD      input_value, 0
+                    LOAD      stable_value, 0
+                    LOAD      compare_value, 0
+                    LOAD      output_value, 0
+
+                    LOAD      sample_addr, scratch_start_addr
+                    LOAD      sample_counter, sample_count_20
+
+                    LOAD      delay_count_outer, 0
+                    LOAD      delay_count_middle, 0
+                    LOAD      delay_count_inner, 0
+
+init_clear_samples_loop: 
+                    STORE     input_value, ( sample_addr )
+                    ADD       sample_addr, 1
+                    SUB       sample_counter, 1
+                    JUMP      NZ, init_clear_samples_loop
+
+                    LOAD      sample_addr, scratch_start_addr
+                    LOAD      sample_counter, 0
+
+                    RET       
+
+
+; ============================================================
+; start
+; ------------------------------------------------------------
+; Main program loop.
+; 
+; Flow:
+; 1. Debounce the switch input.
+; 2. Reverse the 4-bit value.
+; 3. Output the result to LEDs.
+; 4. Repeat forever.
+; ============================================================
+
+                    ORG       96
+
+start: 
+                    CALL      debounce
+                    CALL      reverse_bits
+                    CALL      output0
+                    JUMP      start
+
+
+; ============================================================
+; debounce
+; ------------------------------------------------------------
+; Software debounce algorithm:
+; 
+; 1. Read 20 samples from the switch input.
+; 2. Store each sample in consecutive scratchpad locations.
+; 3. Compare all samples to the first sample.
+; 4. If any sample is different, repeat the whole process.
+; 5. If all samples are equal, accept the value as stable.
+; 
+; Output:
+; stable_value = stable debounced switch value
+; ============================================================
+
+                    ORG       $80
+
+debounce: 
+
+debounce_restart: 
+                    LOAD      sample_addr, scratch_start_addr
+                    LOAD      sample_counter, sample_count_20
+
+debounce_sample_loop: 
+                    CALL      input0
+                    STORE     input_value, ( sample_addr )
+
+                    CALL      delay
+
+                    ADD       sample_addr, 1
+                    SUB       sample_counter, 1
+                    JUMP      NZ, debounce_sample_loop
+
+                    FETCH     stable_value, scratch_start_addr
+
+; The first sample at scratchpad[00] is used as the reference value.
+; Therefore, compare only scratchpad[01] to scratchpad[13] = 19 samples.
+                    LOAD      sample_addr, scratch_start_addr
+                    ADD       sample_addr, 1
+
+                    LOAD      sample_counter, sample_count_19
+
+debounce_check_loop: 
+                    FETCH     compare_value, ( sample_addr )
+                    COMP      compare_value, stable_value
+                    JUMP      NZ, debounce_restart
+
+                    ADD       sample_addr, 1
+                    SUB       sample_counter, 1
+                    JUMP      NZ, debounce_check_loop
+
+                    RET       
+
+
+; ============================================================
+; input0
+; ------------------------------------------------------------
+; Reads the switch register through port_in.
+; Only the lower 4 bits are relevant.
+; 
+; Result:
+; input_value[3:0] = switches[3:0]
+; ============================================================
+
+                    ORG       $C0
+
+input0: 
+                    IN        input_value, port_in
+                    AND       input_value, 15
+                    RET       
+
+
+; ============================================================
+; delay
+; ------------------------------------------------------------
+; Top-level delay procedure.
+; Based on three nested software loops.
+; ============================================================
+
+                    ORG       $D0
+
+delay: 
+                    CALL      init_delay_outer
+
+delay_outer_loop: 
+                    CALL      delay_middle
+                    SUB       delay_count_outer, 1
+                    JUMP      NZ, delay_outer_loop
+
+                    RET       
+
+
+; ============================================================
+; Delay outer counter initialization
+; ============================================================
+
+
+init_delay_outer: 
+                    LOAD      delay_count_outer, theDelay
+                    RET       
+
+
+; ============================================================
+; delay_middle
+; ------------------------------------------------------------
+; Middle nested delay loop.
+; ============================================================
+
+
+delay_middle: 
+                    CALL      init_delay_middle
+
+delay_middle_loop: 
+                    CALL      delay_inner
+                    SUB       delay_count_middle, 1
+                    JUMP      NZ, delay_middle_loop
+
+                    RET       
+
+
+; ============================================================
+; Delay middle counter initialization
+; ============================================================
+
+
+init_delay_middle: 
+                    LOAD      delay_count_middle, theDelay
+                    RET       
+
+
+; ============================================================
+; delay_inner
+; ------------------------------------------------------------
+; Inner nested delay loop.
+; ============================================================
+
+
+delay_inner: 
+                    CALL      init_delay_inner
+
+delay_inner_loop: 
+                    SUB       delay_count_inner, 1
+                    JUMP      NZ, delay_inner_loop
+
+                    RET       
+
+
+; ============================================================
+; Delay inner counter initialization
+; ============================================================
+
+
+init_delay_inner: 
+                    LOAD      delay_count_inner, theDelay
+                    RET       
+
+
+; ============================================================
+; reverse_bits
+; ------------------------------------------------------------
+; Reverses the order of the lower 4 bits using the Carry flag.
+; 
+; Input:
+; stable_value = 0000 X3 X2 X1 X0
+; 
+; Output:
+; output_value = 0000 X0 X1 X2 X3
+; 
+; Method:
+; SR0 shifts the LSB of compare_value into Carry.
+; SLA shifts output_value left and inserts Carry into bit 0.
+; After 4 iterations, the lower 4 bits are reversed.
+; 
+; Note:
+; compare_value is used as a temporary copy because SR0 modifies
+; the shifted register. This keeps stable_value available for debug.
+; ============================================================
+
+                    ORG       $130
+
+reverse_bits: 
+                    LOAD      output_value, 0
+                    LOAD      compare_value, stable_value
+                    LOAD      sample_counter, 4
+
+reverse_loop: 
+                    SR0       compare_value
+                    SLA       output_value
+
+                    SUB       sample_counter, 1
+                    JUMP      NZ, reverse_loop
+
+                    AND       output_value, 15
+                    RET       
+
+
+; ============================================================
+; output0
+; ------------------------------------------------------------
+; Writes the reversed 4-bit value to the LED register through
+; port_out.
+; ============================================================
+
+                    ORG       $140
+
+output0: 
+                    OUT       output_value, port_out
+                    RET       
