@@ -292,6 +292,11 @@ After a stable input value is accepted, the firmware reverses the lower four bit
 
 Before integrating the firmware into Vivado, the PicoBlaze assembly code was imported into **pBlazIDE** for testing and verification.
 
+The pBlazIDE test file used for this verification is stored in:
+
+```text
+firmware/TB_PicoBlaze_Debounce.psm
+```
 
 To simulate the hardware interface, the following definitions were added:
 
