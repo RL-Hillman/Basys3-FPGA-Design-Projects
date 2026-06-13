@@ -88,11 +88,8 @@ The schematic above shows the final RTL-level connection between the PicoBlaze p
 | `kcpsm6.vhd` | The KCPSM6 PicoBlaze processor core | Executes the assembly firmware that performs debounce, comparison, bit reversal, and output control |
 | `PicoBlaze_Debounce.vhd` | The generated VHDL program memory for hardware | Stores the assembled PicoBlaze instructions with the real hardware debounce delay |
 | `PicoBlaze_Debounce_tst.vhd` | The generated VHDL program memory for simulation | Uses a shorter delay so the debounce behavior can be simulated quickly |
-| `REG.vhd` | A generic clocked register module | Used to store stable hardware values on the rising edge of the clock |
 | `switch_register_inst` | Instance of `REG.vhd` | Samples the physical switch input before PicoBlaze reads it |
 | `led_register_inst` | Instance of `REG.vhd` | Stores the last valid PicoBlaze output and keeps the LEDs stable |
-| Input port logic | Combinational VHDL logic inside `top.vhd` | Places the switch register value on `in_port` when PicoBlaze reads from port `0x00` |
-| Output port logic | Combinational VHDL logic inside `top.vhd` | Enables the LED register only when PicoBlaze writes to port `0x01` |
 | `tb_top.vhd` | VHDL testbench | Simulates the top-level design and verifies the expected switch-to-LED behavior |
 | `Basys3.xdc` | Vivado constraints file | Maps the top-level VHDL ports to the physical Basys3 pins |
 
