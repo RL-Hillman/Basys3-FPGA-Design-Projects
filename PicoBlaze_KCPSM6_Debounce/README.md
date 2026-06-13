@@ -75,7 +75,10 @@ The hardware system is built around the **KCPSM6 PicoBlaze** and a generated VHD
 The debounce algorithm runs in PicoBlaze assembly firmware, while the surrounding VHDL logic connects the processor to the Basys3 switches and LEDs.
 
 <p align="center">
-  <img src="docs/images/vivado_rtl_schematic.png" width="950" alt="Vivado RTL Schematic of the PicoBlaze Debounce System">
+  <img src="docs/images/vivado_rtl_schematic.png"
+       width="1200"
+       height="800"
+       alt="Vivado RTL Schematic of the PicoBlaze Debounce System">
 </p>
 
 The schematic above shows the RTL-level connection between the main design components.
