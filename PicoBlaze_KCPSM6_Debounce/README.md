@@ -77,8 +77,6 @@ led[3:0] = 1000
 
 The hardware system is built around the **KCPSM6 PicoBlaze** and a generated VHDL program memory ROM.
 
-The debounce algorithm runs in PicoBlaze assembly firmware, while the surrounding VHDL logic connects the processor to the Basys3 switches and LEDs.
-
 <p align="center">
   <img src="docs/images/vivado_rtl_schematic.png"
        width="1200"
@@ -133,8 +131,6 @@ The processor communicates with the rest of the design through:
 | `out_port` | Carries output data from PicoBlaze |
 | `port_id` | Selects the logical I/O port |
 | `write_strobe` | Indicates a valid output write cycle |
-
-The debounce process is implemented as software running on a soft processor, rather than as a fully custom VHDL state machine.
 
 ---
 
@@ -428,10 +424,7 @@ They are included to document the development process and make the project easie
 
 ## Summary
 
-This project implements a complete PicoBlaze-based switch debounce system on the Basys3 FPGA board.
+This project implements a PicoBlaze-based switch debounce system, successfully demonstrating a complete Hardware/Software co-design flow on the Basys3 FPGA. By offloading the sequential debounce logic to a soft-core processor, the design maintains a simple, modular VHDL hardware architecture. 
 
-The debounce algorithm is implemented in PicoBlaze assembly, while the physical switch and LED interfaces are implemented in VHDL. The project demonstrates the full development flow from firmware writing, to program memory generation, to VHDL integration, simulation, and hardware mapping.
-
-It demonstrates how a soft-core processor can be used inside FPGA logic to implement practical embedded control behavior.
-
+The project covers the full development cycle: from writing assembly and generating program memory ROM, to integrating the core into Vivado, running behavioral simulations, and mapping to physical hardware. Ultimately, it highlights how soft-core processors can be effectively used inside FPGA logic to implement practical embedded control behavior.
 
