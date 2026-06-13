@@ -355,11 +355,13 @@ In this project, debounce is a good fit for PicoBlaze because it is a sequential
 
 ## Repository Structure
 
+## Repository Structure
+
 ```text
-PicoBlaze_KCPSM_Debounce/
+PicoBlaze_KCPSM6_Debounce/
 │
 ├── README.md
-│ 
+├── .gitattributes
 │
 ├── vivado_sources/
 │   ├── top.vhd
@@ -386,10 +388,11 @@ PicoBlaze_KCPSM_Debounce/
 │
 └── docs/
     └── images/
-        ├── vivado_rtl_schematic.png
+        ├── kcpsm6_block_diagram.png
         ├── kcpsm6_write_timing.png
-        ├── vivado_simulation_waveform.png
-        └── pblazide_test.png
+        ├── pblazide_test.png
+        ├── vivado_rtl_schematic.png
+        └── vivado_simulation_waveform.png
 ```
 
 ## How to Run in Vivado
