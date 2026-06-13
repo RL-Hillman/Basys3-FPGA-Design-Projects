@@ -343,18 +343,12 @@ This debounce task could be implemented entirely in VHDL, but PicoBlaze provides
 
 | Category | KCPSM6 PicoBlaze | Pure FPGA Logic |
 |---|---|---|
-| Control Flow | Easy to describe sequential algorithms | Requires explicit FSM design |
-| Flexibility | Firmware can be modified more easily | HDL logic must be redesigned |
-| Resource Behavior | Logic usage remains mostly fixed as firmware grows | Logic usage grows with implementation complexity |
-| Performance | Sequential instruction execution | Fully parallel hardware execution |
+| Control Flow | Easy to describe sequential algorithms | Requires explicit FSM and control logic |
+| Resource Behavior | Resource requirements remain constant with increasing complexity | Logic resources grow with increasing complexity |
 | Best Use Case | Control, sequencing, debounce, simple embedded tasks | High-speed datapaths and parallel processing |
 | Design Tradeoff | Lower performance, simpler control design | Higher performance, more manual hardware design |
-
-| **Category** | **PicoBlaze Microcontroller** | **FPGA Logic** |
-|---|---|---|
-| **Strengths** | <ul><li>Easy to program, excellent for control and state machine applications</li><li>Resource requirements remain constant with increasing complexity</li><li>Re-uses logic resources, excellent for lower-performance functions</li></ul> | <ul><li>Significantly higher performance</li><li>Excellent at parallel operations</li><li>Sequential vs. parallel implementation trade-offs optimize performance or cost</li><li>Fast response to multiple, simultaneous inputs</li></ul> |
-| **Weaknesses** | <ul><li>Executes sequentially</li><li>Performance degrades with increasing complexity</li><li>Program memory requirements increase with increasing complexity</li><li>Slower response to simultaneous inputs</li></ul> | <ul><li>Control and state machine applications more difficult to program</li><li>Logic resources grow with increasing complexity</li></ul> |
-
+| Execution Model | Sequential instruction execution | Fully parallel hardware execution |
+| Design Tradeoff | Simpler development with lower performance | Higher performance with increased design complexity |
 
 In this project, debounce is a good fit for PicoBlaze because it is a sequential process based on repeated sampling, delays, comparisons, and controlled output updates.
 
