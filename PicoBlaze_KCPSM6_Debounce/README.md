@@ -70,52 +70,40 @@ led[3:0] = 1000
 
 ## Hardware Architecture and HDL Components
 
-The hardware design is built from a small number of VHDL components that work together to create a complete PicoBlaze-based embedded system.
+The hardware system is built around the **KCPSM6 PicoBlaze** and a generated VHDL program memory ROM.
 
-The main idea is simple: the physical switches are sampled by FPGA logic, PicoBlaze reads that value through an input port, the firmware performs debounce and bit reversal, and the result is written back to the LEDs through an output port.
+The debounce algorithm runs in PicoBlaze assembly firmware, while the surrounding VHDL logic connects the processor to the Basys3 switches and LEDs.
 
 <p align="center">
   <img src="docs/images/vivado_rtl_schematic.png" width="950" alt="Vivado RTL Schematic of the PicoBlaze Debounce System">
 </p>
 
-The schematic above shows the final RTL-level connection between the PicoBlaze processor, the generated program memory, the input register, the output register, and the I/O decoding logic.
-
-## HDL Components
-
-| Component | What It Does | Why It Is Needed |
-|---|---|---|
-| `top.vhd` | The top-level VHDL file of the project | Connects all parts of the system together and exposes the external FPGA ports: `clk`, `rst`, `sw`, and `led` |
-| `kcpsm6.vhd` | The KCPSM6 PicoBlaze processor core | Executes the assembly firmware that performs debounce, comparison, bit reversal, and output control |
-| `PicoBlaze_Debounce.vhd` | The generated VHDL program memory for hardware | Stores the assembled PicoBlaze instructions with the real hardware debounce delay |
-| `PicoBlaze_Debounce_tst.vhd` | The generated VHDL program memory for simulation | Uses a shorter delay so the debounce behavior can be simulated quickly |
-| `switch_register_inst` | Instance of `REG.vhd` | Samples the physical switch input before PicoBlaze reads it |
-| `led_register_inst` | Instance of `REG.vhd` | Stores the last valid PicoBlaze output and keeps the LEDs stable |
-| `tb_top.vhd` | VHDL testbench | Simulates the top-level design and verifies the expected switch-to-LED behavior |
-| `Basys3.xdc` | Vivado constraints file | Maps the top-level VHDL ports to the physical Basys3 pins |
-
+The schematic above shows the RTL-level connection between the main design components.
 
 ### `top.vhd`
 
 `top.vhd` is the top-level wrapper of the FPGA design.
 
-It connects all main parts of the system:
+It connects the external Basys3 signals to the internal PicoBlaze-based system:
 
-- the KCPSM6 PicoBlaze processor
-- the generated program memory
-- the switch input register
-- the LED output register
-- the PicoBlaze input/output port logic
-- the external Basys3 pins: `clk`, `rst`, `sw`, and `led`
+```vhdl
+clk : in std_logic;
+rst : in std_logic;
+sw  : in  std_logic_vector(3 downto 0);
+led : out std_logic_vector(3 downto 0);
+```
 
-This file is needed because the PicoBlaze processor does not connect directly to the board switches and LEDs.  
-The top-level logic defines how the processor communicates with the external hardware.
+Inside this file, the design instantiates the PicoBlaze processor, the generated program memory, the switch register, and the LED register.
 
-In this project, `top.vhd` maps:
+It also contains the VHDL logic that connects PicoBlaze logical I/O ports to the hardware interface:
 
-| PicoBlaze Port | Direction | Connected To |
+| PicoBlaze Port | Direction | Connected Hardware |
 |---|---|---|
 | `0x00` | Input | Registered switch value |
 | `0x01` | Output | LED register |
+
+The PicoBlaze processor does not connect directly to the Basys3 switches and LEDs.  
+`top.vhd` defines the complete hardware system around the processor.
 
 ---
 
@@ -123,30 +111,29 @@ In this project, `top.vhd` maps:
 
 `kcpsm6.vhd` is the KCPSM6 PicoBlaze processor core.
 
-This is the soft CPU that executes the assembly firmware.  
-It fetches instructions from the generated program memory and communicates with the surrounding VHDL logic using PicoBlaze I/O ports.
+This is the soft CPU that executes the PicoBlaze assembly firmware.  
+In this project, the firmware performs the debounce algorithm, checks that the switch input is stable, reverses the lower four bits, and writes the result to the output port.
 
-The processor is responsible for the sequential control algorithm:
+The processor communicates with the rest of the design through:
 
-- reading the switch value
-- collecting repeated samples
-- comparing the samples
-- deciding when the input is stable
-- reversing the lower four bits
-- writing the result to the output port
+| Interface | Purpose |
+|---|---|
+| Program memory interface | Fetches instructions from the generated ROM |
+| `in_port` | Reads external input data |
+| `out_port` | Writes output data |
+| `port_id` | Selects the logical I/O port |
+| `write_strobe` | Marks a valid output write cycle |
 
-This component is needed because the debounce algorithm is implemented in software instead of being implemented entirely as a VHDL state machine.
+This component is needed because the debounce process is implemented as software running on a soft processor, rather than as a fully custom VHDL state machine.
 
 ---
 
 ### `PicoBlaze_Debounce.vhd`
 
-`PicoBlaze_Debounce.vhd` is the generated VHDL program memory used for the hardware implementation.
+`PicoBlaze_Debounce.vhd` is the generated VHDL program memory used for hardware implementation.
 
-It is created from the PicoBlaze assembly source file using the KCPSM6 assembler.  
-The KCPSM6 processor fetches its 18-bit instructions from this ROM during operation.
-
-The main connection between the processor and this memory is:
+It is created from the PicoBlaze assembly firmware using the KCPSM6 assembler.  
+The PicoBlaze processor fetches its instructions from this ROM through the `address`, `instruction`, and `bram_enable` signals.
 
 ```vhdl
 program_memory_inst : entity work.PicoBlaze_Debounce
@@ -158,54 +145,25 @@ program_memory_inst : entity work.PicoBlaze_Debounce
     );
 ```
 
-This file is needed because PicoBlaze does not execute the `.psm` assembly file directly.  
-The assembly firmware must first be converted into a VHDL program memory that can be included in the Vivado project.
+This component is needed because PicoBlaze does not execute the `.psm` source file directly.  
+The assembly program must first be converted into a VHDL program memory file that can be included in the Vivado design.
 
 ---
 
 ### `PicoBlaze_Debounce_tst.vhd`
 
-`PicoBlaze_Debounce_tst.vhd` is a second generated program memory file used for simulation.
+`PicoBlaze_Debounce_tst.vhd` is a simulation version of the generated program memory.
 
-It contains the same firmware behavior, but with a shorter debounce delay.  
-This makes the Vivado behavioral simulation much faster.
+It contains the same firmware logic but uses a shorter debounce delay, so the design can be simulated faster in Vivado.
 
-The hardware version uses:
-
-```vhdl
-PicoBlaze_Debounce.vhd
-```
-
-The simulation version can use:
-
-```vhdl
-PicoBlaze_Debounce_tst.vhd
-```
-
-This component is needed because a real debounce delay is useful on hardware, but too slow for convenient simulation.
-
----
-
-### `REG.vhd`
-
-`REG.vhd` is a generic clocked register module.
-
-It stores an input value on the rising edge of the clock when its enable signal is active.
-
-In this project, the same register module is reused twice:
-
-| Instance | Purpose |
-|---|---|
-| `switch_register_inst` | Samples the physical switch input |
-| `led_register_inst` | Stores the LED output value |
-
-This component is needed because the system requires stable stored values rather than only temporary combinational signals.
+This component is useful for waveform verification.  
+For real hardware implementation, the design uses `PicoBlaze_Debounce.vhd`.
 
 ---
 
 ### `switch_register_inst`
 
-`switch_register_inst` is an instance of `REG.vhd`.
+`switch_register_inst` is an instance of the generic `REG.vhd` register module.
 
 It samples the physical switch input `sw[3:0]` on the clock and stores it as `switch_reg_value`.
 
@@ -213,10 +171,10 @@ It samples the physical switch input `sw[3:0]` on the clock and stores it as `sw
 sw[3:0]  ->  switch_register_inst  ->  switch_reg_value
 ```
 
-This register is needed because the physical switches are external board signals.  
+This register is needed because the switches are external board signals.  
 The PicoBlaze processor reads the registered value instead of reading the raw switch pins directly.
 
-When PicoBlaze reads from input port `0x00`, the VHDL input logic places this registered value on `in_port`:
+When PicoBlaze reads from input port `0x00`, `top.vhd` places the registered switch value on `in_port`:
 
 ```vhdl
 when X"00" =>
@@ -229,7 +187,7 @@ The upper four bits are filled with zeros because PicoBlaze uses 8-bit I/O ports
 
 ### `led_register_inst`
 
-`led_register_inst` is another instance of `REG.vhd`.
+`led_register_inst` is another instance of the generic `REG.vhd` register module.
 
 It stores the lower four bits written by PicoBlaze and drives the physical LEDs.
 
@@ -238,70 +196,15 @@ out_port[3:0]  ->  led_register_inst  ->  led[3:0]
 ```
 
 This register is needed because `out_port` is only valid during a PicoBlaze output operation.  
-The LEDs need to keep showing the last valid result even after the `OUTPUT` instruction has finished.
+The LEDs must keep displaying the last valid output value after the `OUTPUT` instruction has finished.
 
-The LED register updates only when PicoBlaze writes to output port `0x01`:
-
-```vhdl
-led_write_enable <= '1' when (port_id = X"01" and write_strobe = '1') else '0';
-```
-
-This prevents the LEDs from changing when PicoBlaze is accessing another output port or when the data on `out_port` is not a valid write.
-
----
-
-### Input Port Logic
-
-The input port logic is written inside `top.vhd`.
-
-It decides what value PicoBlaze receives on `in_port` based on the current `port_id`.
-
-```vhdl
-process(port_id, switch_reg_value)
-begin
-    case port_id is
-
-        when X"00" =>
-            in_port <= "0000" & switch_reg_value;
-
-        when others =>
-            in_port <= (others => '0');
-
-    end case;
-end process;
-```
-
-This logic is needed because PicoBlaze has one shared 8-bit input bus, `in_port`, but can read from different logical port numbers.
-
-In this project:
-
-| `port_id` | Value Returned to PicoBlaze |
-|---|---|
-| `0x00` | Registered switch value |
-| Other | `00000000` |
-
----
-
-### Output Port Logic
-
-The output port logic is also written inside `top.vhd`.
-
-It checks when PicoBlaze performs a valid write to the LED output port.
+The LED register updates only when PicoBlaze writes to output port `0x01` and `write_strobe` is active:
 
 ```vhdl
 led_write_enable <= '1' when (port_id = X"01" and write_strobe = '1') else '0';
 ```
 
-This logic is needed because `out_port` is a shared output bus.  
-The design should not update the LEDs every time `out_port` changes. It should update them only when PicoBlaze explicitly writes to port `0x01`.
-
-During an `OUTPUT` instruction, PicoBlaze provides:
-
-| Signal | Meaning |
-|---|---|
-| `port_id` | Which output port is being written |
-| `out_port` | The data being written |
-| `write_strobe` | Indicates that the output write is valid |
+This prevents the LEDs from changing when PicoBlaze is not performing a valid write to the LED port.
 
 <p align="center">
   <img src="docs/images/kcpsm6_write_timing.png" width="850" alt="KCPSM6 Output Write Timing">
@@ -311,7 +214,7 @@ The timing diagram shows why `write_strobe` is required: it marks the clock cycl
 
 ---
 
-### How the System Works
+### System Operation Summary
 
 The complete operation is:
 
@@ -321,18 +224,19 @@ The complete operation is:
 3. PicoBlaze reads the registered switch value through input port 0x00.
 4. The firmware performs debounce and bit reversal.
 5. PicoBlaze writes the result to output port 0x01.
-6. The VHDL output logic detects port_id = 0x01 and write_strobe = 1.
-7. led_register_inst stores out_port[3:0].
-8. The Basys3 LEDs display the stored result.
+6. led_register_inst stores out_port[3:0] only during a valid write_strobe.
+7. The Basys3 LEDs display the stored result.
 ```
 
 This creates a clean separation between software and hardware:
 
 | Part | Responsibility |
 |---|---|
-| PicoBlaze firmware | Debounce algorithm and bit reversal |
-| VHDL logic | Hardware connection, port decoding, and register storage |
+| PicoBlaze firmware | Debounce algorithm, sample comparison, bit reversal, and output decision |
+| VHDL logic | Hardware connection, I/O port decoding, switch sampling, and LED storage |
 | XDC constraints | Physical mapping to the Basys3 board pins |
+
+
 
 
 ## Development Flow
