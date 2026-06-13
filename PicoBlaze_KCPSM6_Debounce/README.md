@@ -90,12 +90,14 @@ The main hardware blocks are:
 | `write_strobe` gating logic | Enables the LED register only during a valid PicoBlaze `OUTPUT` instruction |
 | `led_register_inst` | Stores the lower 4 bits written by PicoBlaze and drives `led[3:0]` |
 
-## KCPSM6 Processor Interface
+## KCPSM6 Processor Interface and Output Timing
 
-In this design, the KCPSM6 processor is connected to two main interfaces:
+The KCPSM6 processor communicates with the surrounding VHDL logic through two main interfaces:
 
-1. The program memory interface, used to fetch 18-bit instructions from the generated ROM.
-2. The 8-bit I/O port interface, used to communicate with the surrounding VHDL logic.
+1. A program memory interface used to fetch 18-bit instructions from the generated ROM.
+2. An 8-bit I/O port interface used to read external inputs and write output data.
+
+In this project, the program memory interface connects the processor to the generated `PicoBlaze_Debounce.vhd` ROM, while the I/O interface connects the processor to the switch and LED logic implemented in `top.vhd`.
 
 Key KCPSM6 signals used by the custom VHDL wrapper:
 
@@ -103,10 +105,24 @@ Key KCPSM6 signals used by the custom VHDL wrapper:
 |---|---|
 | `address`, `instruction`, `bram_enable` | Program memory fetch interface |
 | `port_id` | Selects the logical PicoBlaze I/O port |
-| `in_port` | Provides registered switch data to the processor |
-| `out_port` | Carries data written by the processor |
-| `write_strobe` | Qualifies valid output writes to the LED register |
+| `in_port` | Provides registered switch data to the processor during `INPUT` |
+| `out_port` | Carries data written by the processor during `OUTPUT` |
+| `write_strobe` | Indicates a valid output write and enables the LED register |
 | `clk`, `reset` | Synchronous clock and processor reset |
+
+The output path is controlled by both `port_id` and `write_strobe`.
+
+When the firmware executes an output instruction, PicoBlaze places the target port number on `port_id`, places the output data on `out_port`, and asserts `write_strobe`. The LED register captures the lower four bits of `out_port` only when the selected port is `0x01` and `write_strobe` is active.
+
+```vhdl
+led_write_enable <= '1' when (port_id = X"01" and write_strobe = '1') else '0';
+```
+
+<p align="center">
+  <img src="docs/images/kcpsm6_write_timing.png" width="850" alt="KCPSM6 Output Write Timing">
+</p>
+
+This timing is the reason the LEDs are not connected directly to `out_port`. The `out_port` bus is shared by all possible PicoBlaze output ports, while `write_strobe` confirms when the current value is a valid output write.
 
 ## Development Flow
 
