@@ -138,15 +138,18 @@ The debounce process is implemented as software running on a soft processor, rat
 `PicoBlaze_Debounce.vhd` is the program memory of the PicoBlaze system.
 
 This file contains the actual machine instructions that the KCPSM6 processor runs.  
+
 It was generated from the PicoBlaze assembly source file using the KCPSM6 assembler.
 
 The original firmware is written in a human-readable `.psm` assembly file, but the FPGA design uses the generated VHDL ROM version:
 
 ```text
 PicoBlaze_Debounce.psm
+        +
+ROM_form.vhd
         |
         v
-KCPSM6 assembler
+kcpsm6.exe
         |
         v
 PicoBlaze_Debounce.vhd
@@ -157,6 +160,7 @@ The program memory returns the matching 18-bit instruction through `instruction`
 The `bram_enable` signal enables the memory access, and `clk` synchronizes the ROM with the rest of the system.
 
 ---
+
 
 
 ### `PicoBlaze_Debounce_tst.vhd`
@@ -298,25 +302,6 @@ These definitions are used only for pBlazIDE verification.
   <img src="docs/images/pblazide_test.png" width="850" alt="pBlazIDE PicoBlaze Firmware Test">
 </p>
 
-## Program Memory Generation
-
-The `.psm` assembly file is not directly executed by Vivado.
-
-The KCPSM6 assembler converts the PicoBlaze assembly program into a VHDL program memory file. The assembler uses `ROM_form.vhd` as a template.
-
-```text
-PicoBlaze_Debounce.psm
-        +
-ROM_form.vhd
-        |
-        v
-kcpsm6.exe
-        |
-        v
-PicoBlaze_Debounce.vhd
-```
-
-The generated VHDL file is added to Vivado as a design source and instantiated in `top.vhd` as the program memory ROM.
 
 ## Vivado Simulation
 
