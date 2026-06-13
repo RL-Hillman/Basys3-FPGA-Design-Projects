@@ -268,7 +268,6 @@ flowchart TD
     G --> H[Add Basys3 XDC Constraints]
     H --> I[Generate Bitstream for Hardware]
 ```
-
 ## PicoBlaze Firmware
 
 The debounce algorithm is implemented in PicoBlaze assembly.
@@ -279,44 +278,15 @@ The firmware defines two I/O ports:
 CONSTANT port_in,  00
 CONSTANT port_out, 01
 ```
+The firmware implements debounce using repeated sampling, delay loops, and sample comparison.
 
-| Port | Direction | Purpose |
-|---|---|---|
-| `0x00` | Input | Read switch value |
-| `0x01` | Output | Write LED value |
+The debounce timing is controlled by the `theDelay` firmware constant. This makes the delay easy to adjust for either fast simulation or real hardware operation.
 
-The firmware performs the following sequence:
+For each debounce check, the firmware collects **20 consecutive switch samples** and stores them in PicoBlaze scratchpad memory. The first sample is used as the reference value, and the remaining **19 samples** are compared against it.
 
-1. Initialize internal PicoBlaze registers.
-2. Read the switch value from input port `0x00`.
-3. Store multiple switch samples in scratchpad memory.
-4. Wait between samples using a delay loop.
-5. Compare all collected samples.
-6. Accept the value only if all samples are equal.
-7. Reverse the lower four bits.
-8. Write the result to output port `0x01`.
+If all samples are equal, the input is accepted as a stable debounced value. If any sample is different, the debounce process restarts and a new set of samples is collected.
 
-This approach filters mechanical switch bouncing by requiring the input value to remain stable across multiple consecutive samples.
-
-### Debounce Configuration
-
-The debounce algorithm is based on repeated sampling and comparison.
-
-In this implementation, the firmware collects **20 consecutive samples** from the switch input and stores them in PicoBlaze scratchpad memory. The first sample is used as the reference value, and the remaining **19 samples** are compared against it.
-
-If all samples are equal, the input is accepted as a stable debounced value.  
-If any sample is different, the debounce process restarts and a new set of samples is collected.
-
-| Parameter | Value | Meaning |
-|---|---|---|
-| Number of samples | 20 | Total switch samples collected for one debounce check |
-| Compared samples | 19 | Samples compared against the first reference sample |
-| Delay source | `theDelay` constant | Controls the time between samples |
-| Simulation delay | Small `theDelay` value | Used to make Vivado simulation run faster |
-| Hardware delay | Larger `theDelay` value | Used to create a realistic debounce delay on the FPGA |
-
-The delay is implemented using nested software loops in PicoBlaze assembly.  
-This makes the debounce timing easy to adjust by changing the `theDelay` constant in the firmware.
+After a stable input value is accepted, the firmware reverses the lower four bits and writes the result to output port `0x01`.
 
 ## pBlazIDE Firmware Verification
 
