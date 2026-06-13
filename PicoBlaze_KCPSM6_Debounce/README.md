@@ -5,7 +5,7 @@
 
 ## Overview
 
-This project implements a switch debounce system on the Basys3 FPGA board using the **KCPSM6 PicoBlaze soft microcontroller**.
+This project implements a switch debounce system on the Basys3 FPGA board using the **KCPSM6 PicoBlaze soft processor**.
 
 The system reads a 4-bit input from the physical board switches, performs a software debounce algorithm in PicoBlaze assembly, reverses the bit order, and outputs the result to four physical LEDs.
 
