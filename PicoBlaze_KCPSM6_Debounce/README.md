@@ -175,7 +175,7 @@ Both `PicoBlaze_Debounce.vhd` and `PicoBlaze_Debounce_tst.vhd` are generated VHD
 | Program Memory File | Purpose | Delay Setting |
 |---|---|---|
 | `PicoBlaze_Debounce.vhd` | Hardware implementation | Uses the larger hardware delay value, `theDelay = 0x64`, which is approximately 40 ms per delay-loop interval |
-| `PicoBlaze_Debounce_tst.vhd` | Fast Vivado simulation | Uses the smaller simulation delay value, `theDelay = 0x02`, which is approximately 320 ns per delay-loop  |
+| `PicoBlaze_Debounce_tst.vhd` | Fast Vivado simulation | Uses the smaller simulation delay value, `theDelay = 0x02`, which is approximately 320 ns per delay-loop interval  |
 
 The shorter delay in `PicoBlaze_Debounce_tst.vhd` preserves the same debounce logic, but avoids waiting for the full hardware debounce timing during simulation.
 
