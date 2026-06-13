@@ -70,37 +70,25 @@ led[3:0] = 1000
 
 ## Hardware Architecture
 
-The hardware system contains the following main components:
+The hardware system is built around the KCPSM6 PicoBlaze processor and a generated VHDL program memory ROM.
+
+The surrounding VHDL logic connects the processor to the Basys3 switch and LED interface through clocked registers and PicoBlaze I/O port decoding.
+
+<p align="center">
+  <img src="docs/images/vivado_rtl_schematic.png" width="950" alt="Vivado RTL Schematic of the PicoBlaze Debounce System">
+</p>
+
+The main hardware blocks are:
 
 | Component | Purpose |
 |---|---|
-| KCPSM6 PicoBlaze | Executes the debounce firmware |
-| Program Memory ROM | Stores the assembled PicoBlaze instructions |
-| Switch Register | Samples the physical switch input |
-| LED Register | Stores the last valid PicoBlaze output |
-| Top-Level Wrapper | Connects the processor, ROM, registers, ports, and board pins |
-
-```text
-Physical Switches
-        |
-        v
-Switch Register
-        |
-        v
-PicoBlaze in_port
-        |
-        v
-KCPSM6 Processor  <---->  Program Memory ROM
-        |
-        v
-PicoBlaze out_port
-        |
-        v
-LED Register
-        |
-        v
-Physical LEDs
-```
+| `processor_inst` | KCPSM6 PicoBlaze soft microcontroller executing the debounce firmware |
+| `program_memory_inst` | Generated VHDL ROM containing the assembled PicoBlaze instructions |
+| `switch_register_inst` | Samples the physical switch input into a clocked register |
+| `in_port` mux | Provides the registered switch value to PicoBlaze when port `0x00` is selected |
+| `port_id` decode logic | Detects when PicoBlaze accesses output port `0x01` |
+| `write_strobe` gating logic | Enables the LED register only during a valid PicoBlaze `OUTPUT` instruction |
+| `led_register_inst` | Stores the lower 4 bits written by PicoBlaze and drives `led[3:0]` |
 
 ## KCPSM6 Processor Interface
 
