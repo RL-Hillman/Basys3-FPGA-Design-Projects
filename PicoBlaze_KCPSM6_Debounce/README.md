@@ -70,9 +70,7 @@ led[3:0] = 1000
 
 ## Hardware Architecture and HDL Components
 
-The hardware system is built around the **KCPSM6 PicoBlaze soft microcontroller** and a generated VHDL program memory ROM.
-
-The PicoBlaze processor executes the debounce firmware, while the surrounding VHDL logic connects the processor to the Basys3 switch and LED interface. The design includes explicit VHDL component instances and additional RTL logic inferred by Vivado from combinational VHDL code.
+The hardware system is built around the **KCPSM6 PicoBlaze** and a generated VHDL program memory ROM.
 
 <p align="center">
   <img src="docs/images/vivado_rtl_schematic.png" width="950" alt="Vivado RTL Schematic of the PicoBlaze Debounce System">
