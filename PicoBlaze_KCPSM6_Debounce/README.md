@@ -70,7 +70,7 @@ led[3:0] = 1000
 
 ## Hardware Architecture and PicoBlaze I/O Integration
 
-The hardware system is built around the **KCPSM6 PicoBlaze soft microcontroller** and a generated VHDL program memory ROM.
+The hardware system is built around the **KCPSM6 PicoBlaze** and a generated VHDL program memory ROM.
 
 The PicoBlaze processor executes the debounce firmware, while the surrounding VHDL logic connects the processor to the physical Basys3 switches and LEDs. This includes switch sampling, input-port decoding, output-port write qualification, and LED output storage.
 
