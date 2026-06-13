@@ -213,7 +213,7 @@ led_write_enable <= '1' when (port_id = X"01" and write_strobe = '1') else '0';
 This prevents the LEDs from changing when PicoBlaze is not performing a valid write to the LED port.
 
 <p align="center">
-  <img src="docs/images/kcpsm6_write_timing.png" width="500" alt="KCPSM6 Output Write Timing">
+  <img src="docs/images/kcpsm6_write_timing.png" width="600" alt="KCPSM6 Output Write Timing">
 </p>
 
 The timing diagram illustrates the relationship between `port_id`, `out_port`, and `write_strobe` during a PicoBlaze `OUTPUT` instruction.
