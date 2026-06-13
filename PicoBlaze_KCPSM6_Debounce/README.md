@@ -169,9 +169,17 @@ The `bram_enable` signal enables the memory access, and `clk` synchronizes the R
 
 It contains the same firmware logic but uses a shorter debounce delay, so the design can be simulated faster in Vivado.
 
-This component is useful for waveform verification.  
-For real hardware implementation, the design uses `PicoBlaze_Debounce.vhd`.
+For hardware implementation, use:
 
+```vhdl
+program_memory_inst : entity work.PicoBlaze_Debounce
+```
+
+For fast simulation, use:
+
+```vhdl
+program_memory_inst : entity work.PicoBlaze_Debounce_tst
+```
 ---
 
 ### `switch_register_inst`
