@@ -287,16 +287,17 @@ This approach filters mechanical switch bouncing by requiring the input value to
 
 ## pBlazIDE Firmware Verification
 
-Before integrating the firmware into Vivado, the PicoBlaze assembly code was tested and inspected using pBlazIDE.
+Before integrating the firmware into Vivado, the PicoBlaze assembly code was imported into **pBlazIDE** for testing and verification.
 
-These definitions connect simulated devices to the same port numbers used by the firmware.
+
+To simulate the hardware interface, the following definitions were added:
 
 | Definition | Meaning |
 |---|---|
 | `switches DSIN 0` | Simulated switches are connected to input port `0` |
 | `leds DSOUT 1` | Simulated LEDs are connected to output port `1` |
 
-These definitions are used only for pBlazIDE verification.  
+These definitions create virtual input and output devices inside pBlazIDE, allowing the firmware to be tested using the same logical port numbers that are later used in the FPGA implementation.
 
 <p align="center">
   <img src="docs/images/pblazide_test.png" width="850" alt="pBlazIDE PicoBlaze Firmware Test">
