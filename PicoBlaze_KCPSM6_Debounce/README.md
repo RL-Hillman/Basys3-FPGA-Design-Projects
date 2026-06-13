@@ -306,21 +306,28 @@ These definitions create virtual input and output devices inside pBlazIDE, allow
 
 ## Vivado Simulation
 
-A VHDL testbench was created to verify the top-level system behavior.
+## Vivado Simulation
 
-The testbench applies all possible 4-bit switch combinations from `0000` to `1111`. For each input value, the expected LED output is the bit-reversed version of the switch input.
+A VHDL testbench was created to verify the top-level system behavior in Vivado.
+
+The testbench applies all possible 4-bit switch combinations from `0000` to `1111`.  
+Before each stable input value, the testbench also applies fast-changing switch transitions to emulate mechanical switch bouncing.
+
+This verifies that the PicoBlaze firmware does not immediately accept unstable input changes. Instead, it waits until the sampled switch value remains stable before updating the LED output.
 
 <p align="center">
-  <img src="docs/images/vivado_simulation_waveform.png" width="850" alt="Vivado Simulation Waveform">
+  <img src="docs/images/vivado_simulation_waveform.png"
+       width="100%"
+       height="900"
+       alt="Vivado Simulation Waveform">
 </p>
 
 The waveform verifies:
 
-- Correct PicoBlaze program execution
-- Correct switch input sampling
-- Correct output port write behavior
-- Correct LED register update
-- Correct bit-reversal result for all input combinations
+- Fast-changing switch input transitions are applied before stable values
+- The debounce firmware waits for a stable input before accepting the value
+- The final LED output matches the bit-reversed switch input
+- All 16 possible 4-bit input combinations are tested
 
 ## Basys3 Constraints
 
