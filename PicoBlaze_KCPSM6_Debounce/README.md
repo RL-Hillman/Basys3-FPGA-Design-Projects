@@ -285,13 +285,6 @@ This approach filters mechanical switch bouncing by requiring the input value to
 
 Before integrating the firmware into Vivado, the PicoBlaze assembly code was tested and inspected using pBlazIDE.
 
-The pBlazIDE test version uses simulated input and output definitions:
-
-```asm
-switches    DSIN  0
-leds        DSOUT 1
-```
-
 These definitions connect simulated devices to the same port numbers used by the firmware.
 
 | Definition | Meaning |
@@ -300,7 +293,6 @@ These definitions connect simulated devices to the same port numbers used by the
 | `leds DSOUT 1` | Simulated LEDs are connected to output port `1` |
 
 These definitions are used only for pBlazIDE verification.  
-The actual FPGA hardware mapping is implemented in `top.vhd`.
 
 <p align="center">
   <img src="docs/images/pblazide_test.png" width="850" alt="pBlazIDE PicoBlaze Firmware Test">
