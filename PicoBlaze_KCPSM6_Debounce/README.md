@@ -1,6 +1,7 @@
 # KCPSM6 PicoBlaze Switch Debounce System
 
-![HDL](https://img.shields.io/badge/HDL-VHDL-blue.svg) ![Soft CPU](https://img.shields.io/badge/Soft_CPU-KCPSM6%20PicoBlaze-orange.svg) ![Hardware](https://img.shields.io/badge/Hardware-Vivado%20RTL-purple.svg) ![Platform](https://img.shields.io/badge/Platform-Basys3-green.svg) ![Toolchain](https://img.shields.io/badge/Toolchain-Vivado%20%2B%20KCPSM6-red.svg) ![Interface](https://img.shields.io/badge/Interface-PicoBlaze%20I%2FO%20Ports-lightgrey.svg)
+![HDL](https://img.shields.io/badge/HDL-VHDL-blue.svg) ![Soft Core](https://img.shields.io/badge/Soft_Core-KCPSM6%20PicoBlaze-orange.svg) ![Hardware](https://img.shields.io/badge/Hardware-Vivado%20RTL-purple.svg) ![Platform](https://img.shields.io/badge/Platform-Basys3-green.svg) ![Toolchain](https://img.shields.io/badge/Toolchain-Vivado%20%2B%20KCPSM6-red.svg) ![Interface](https://img.shields.io/badge/Interface-PicoBlaze%20I%2FO%20Ports-lightgrey.svg)
+
 
 ## Overview
 
@@ -16,8 +17,12 @@ The goal of this project is to demonstrate how a small soft-core processor can b
 
 Instead of designing the debounce algorithm entirely as custom VHDL logic, the debounce process is implemented as firmware running on PicoBlaze. The surrounding VHDL logic handles the hardware interface: switch sampling, LED output storage, PicoBlaze I/O port decoding, and Basys3 pin mapping through the XDC constraints file.
 
+
+
+
 This project demonstrates:
 
+- Hardware/software co-design inside an FPGA
 - KCPSM6 PicoBlaze soft processor integration
 - PicoBlaze assembly programming
 - VHDL top-level system design
@@ -114,7 +119,7 @@ The PicoBlaze processor does not connect directly to the Basys3 switches and LED
 
 `kcpsm6.vhd` is the KCPSM6 PicoBlaze processor core.
 
-This is the soft CPU that executes the PicoBlaze assembly firmware.  
+This is the soft soft-core processor that executes the PicoBlaze assembly firmware.  
 In this project, the firmware performs the debounce algorithm, checks that the switch input is stable, reverses the lower four bits, and writes the result to the output port.
 
 The processor communicates with the rest of the design through:
@@ -311,9 +316,6 @@ These definitions create virtual input and output devices inside pBlazIDE, allow
   <img src="docs/images/pblazide_test.png" width="850" alt="pBlazIDE PicoBlaze Firmware Test">
 </p>
 
-
-## Vivado Simulation
-
 ## Vivado Simulation
 
 A VHDL testbench was created to verify the top-level system behavior in Vivado.
@@ -346,7 +348,6 @@ This debounce task could be implemented entirely in VHDL, but PicoBlaze provides
 | Control Flow | Easy to describe sequential algorithms | Requires explicit FSM and control logic |
 | Resource Behavior | Resource requirements remain constant with increasing complexity | Logic resources grow with increasing complexity |
 | Best Use Case | Control, sequencing, debounce, simple embedded tasks | High-speed datapaths and parallel processing |
-| Design Tradeoff | Lower performance, simpler control design | Higher performance, more manual hardware design |
 | Execution Model | Sequential instruction execution | Fully parallel hardware execution |
 | Design Tradeoff | Simpler development with lower performance | Higher performance with increased design complexity |
 
@@ -355,10 +356,10 @@ In this project, debounce is a good fit for PicoBlaze because it is a sequential
 ## Repository Structure
 
 ```text
-KCPSM6-Switch-Debounce-Basys3/
+PicoBlaze_KCPSM_Debounce/
 │
 ├── README.md
-├── .gitignore
+│ 
 │
 ├── vivado_sources/
 │   ├── top.vhd
@@ -406,17 +407,6 @@ KCPSM6-Switch-Debounce-Basys3/
 11. Generate the bitstream.
 12. Program the Basys3 board.
 
-## How to Regenerate the Program Memory
-
-To regenerate the VHDL program memory from the PicoBlaze assembly file:
-
-1. Edit the `.psm` firmware file.
-2. Run the KCPSM6 assembler.
-3. Use `ROM_form.vhd` as the ROM template.
-4. Add the generated `.vhd` file to Vivado.
-
-For fast simulation, the debounce delay can be reduced before assembling, and the generated file can be used as `PicoBlaze_Debounce_tst.vhd`.
-
 ## Third-Party Tools and Attribution
 
 This repository includes several PicoBlaze-related tools and files that were used during development.
@@ -433,33 +423,12 @@ The following files were not written by the project author:
 
 They are included to document the development process and make the project easier to reproduce.
 
-Before redistributing third-party tools publicly, their original licensing terms should be reviewed.
-
-## Skills Demonstrated
-
-This project demonstrates practical experience with:
-
-- FPGA design using VHDL
-- Soft-core microcontroller integration
-- PicoBlaze assembly programming
-- Program memory generation
-- Register-based hardware interfacing
-- PicoBlaze I/O port decoding
-- Vivado simulation and waveform analysis
-- XDC constraint mapping for Basys3
-- Hardware/software co-design inside an FPGA
-
-## Author
-
-**Harel Hillman**
-
-Electrical Engineering Student  
-Focus areas: FPGA Design, VHDL, Embedded Systems, and Computer Engineering
-
 ## Summary
 
 This project implements a complete PicoBlaze-based switch debounce system on the Basys3 FPGA board.
 
-The debounce algorithm is implemented in PicoBlaze assembly, while the physical switch and LED interfaces are implemented in VHDL. The project shows the full development flow from firmware writing, to program memory generation, to VHDL integration, simulation, and hardware mapping.
+The debounce algorithm is implemented in PicoBlaze assembly, while the physical switch and LED interfaces are implemented in VHDL. The project demonstrates the full development flow from firmware writing, to program memory generation, to VHDL integration, simulation, and hardware mapping.
 
-It demonstrates how a soft microcontroller can be used inside FPGA logic to implement practical embedded control behavior.
+It demonstrates how a soft-core processor can be used inside FPGA logic to implement practical embedded control behavior.
+
+
