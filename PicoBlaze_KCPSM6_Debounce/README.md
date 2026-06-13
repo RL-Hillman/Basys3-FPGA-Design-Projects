@@ -8,33 +8,23 @@ This project implements a switch debounce system on the Basys3 FPGA board using 
 
 The system reads a 4-bit input from the physical board switches, performs a software debounce algorithm in PicoBlaze assembly, reverses the bit order, and outputs the result to four physical LEDs.
 
-The project demonstrates a complete FPGA soft-processor development flow:
-
-- Writing PicoBlaze assembly firmware
-- Testing the firmware using pBlazIDE
-- Generating VHDL program memory using the KCPSM6 assembler
-- Integrating the KCPSM6 processor core into a VHDL top-level design
-- Mapping PicoBlaze I/O ports to physical FPGA switches and LEDs
-- Verifying the system using Vivado simulation
-- Preparing the design for implementation on the Basys3 board
+The project demonstrates a complete FPGA soft-processor workflow: writing assembly firmware, generating VHDL program memory, integrating the KCPSM6 core into a VHDL top-level design, decoding PicoBlaze I/O ports, verifying the behavior in simulation, and preparing the design for Basys3 hardware implementation.
 
 ## Project Goal
 
 The goal of this project is to demonstrate how a small soft-core processor can be used inside an FPGA to implement a practical embedded control task.
 
-Instead of implementing debounce entirely as custom VHDL logic, the debounce algorithm is implemented as firmware running on the PicoBlaze processor. The surrounding FPGA logic handles the hardware interface, including switch sampling, LED output storage, I/O port decoding, and board-level pin mapping.
+Instead of designing the debounce algorithm entirely as custom VHDL logic, the debounce process is implemented as firmware running on PicoBlaze. The surrounding VHDL logic handles the hardware interface: switch sampling, LED output storage, PicoBlaze I/O port decoding, and Basys3 pin mapping through the XDC constraints file.
 
 This project demonstrates:
 
 - KCPSM6 PicoBlaze soft processor integration
 - PicoBlaze assembly programming
-- Program memory generation from `.psm` source code
-- VHDL top-level system integration
-- Register-based hardware interfacing
-- PicoBlaze `INPUT` and `OUTPUT` port mapping
-- Switch debounce using sequential firmware logic
+- VHDL top-level system design
+- Program memory generation from `.psm` firmware
+- Register-based FPGA hardware interfacing
+- PicoBlaze `INPUT` and `OUTPUT` port decoding
 - Vivado behavioral simulation and waveform verification
-- Basys3 XDC constraint mapping
 
 ## System Behavior
 
@@ -144,20 +134,24 @@ The KCPSM6 processor communicates through two main interfaces:
   <img src="docs/images/kcpsm6_block_diagram.png" width="850" alt="KCPSM6 PicoBlaze Block Diagram">
 </p>
 
-Main KCPSM6 signals used in this project:
+KCPSM6 interface signals connected in this project:
 
-| Signal | Direction | Purpose |
-|---|---|---|
-| `instruction[17:0]` | Input to KCPSM6 | Current instruction received from program memory |
-| `address[11:0]` | Output from KCPSM6 | Address of the next instruction |
-| `bram_enable` | Output from KCPSM6 | Enables program memory access |
-| `in_port[7:0]` | Input to KCPSM6 | Data read during an `INPUT` instruction |
-| `out_port[7:0]` | Output from KCPSM6 | Data written during an `OUTPUT` instruction |
-| `port_id[7:0]` | Output from KCPSM6 | Selects the active I/O port |
-| `write_strobe` | Output from KCPSM6 | One-clock pulse indicating a valid output write |
-| `read_strobe` | Output from KCPSM6 | Indicates an input read operation |
-| `clk` | Input | System clock |
-| `reset` | Input | Processor reset |
+| Signal | Direction | Project Connection | Purpose in This Design |
+|---|---|---|---|
+| `instruction[17:0]` | Input to KCPSM6 | Connected to `PicoBlaze_Debounce.vhd` / `PicoBlaze_Debounce_tst.vhd` | Provides the current instruction from program memory |
+| `address[11:0]` | Output from KCPSM6 | Connected to program memory address input | Selects the next instruction address |
+| `bram_enable` | Output from KCPSM6 | Connected to program memory enable input | Enables instruction fetch from program memory |
+| `in_port[7:0]` | Input to KCPSM6 | Driven by VHDL input-port decode logic | Provides switch data during `INPUT` from port `0x00` |
+| `out_port[7:0]` | Output from KCPSM6 | Connected to LED register input | Carries output data during `OUTPUT` |
+| `port_id[7:0]` | Output from KCPSM6 | Used by VHDL port-decoding logic | Selects whether PicoBlaze is accessing switch input or LED output |
+| `write_strobe` | Output from KCPSM6 | Used in LED write-enable logic | Indicates a valid `OUTPUT` instruction and allows the LED register to capture `out_port` |
+| `read_strobe` | Output from KCPSM6 | Connected to `open` | Not required because the switch input is continuously available through combinational decode logic |
+| `k_write_strobe` | Output from KCPSM6 | Connected to `open` | Not used because the firmware does not use `OUTPUTK` |
+| `interrupt` | Input to KCPSM6 | Tied to `'0'` | Interrupts are not used in this project |
+| `interrupt_ack` | Output from KCPSM6 | Connected to `open` | Not used because interrupts are disabled |
+| `sleep` | Input to KCPSM6 | Tied to `'0'` | Processor remains active |
+| `reset` | Input to KCPSM6 | Connected to top-level `rst` | Resets the processor |
+| `clk` | Input to KCPSM6 | Connected to top-level `clk` | Drives the synchronous processor logic |
 
 ## Development Flow
 
