@@ -92,33 +92,21 @@ The main hardware blocks are:
 
 ## KCPSM6 Processor Interface
 
-The KCPSM6 processor communicates through two main interfaces:
+In this design, the KCPSM6 processor is connected to two main interfaces:
 
-1. A program memory interface used to fetch instructions
-2. An 8-bit I/O port interface used to communicate with external FPGA logic
+1. The program memory interface, used to fetch 18-bit instructions from the generated ROM.
+2. The 8-bit I/O port interface, used to communicate with the surrounding VHDL logic.
 
-<p align="center">
-  <img src="docs/images/kcpsm6_block_diagram.png" width="500" alt="KCPSM6 PicoBlaze Block Diagram">
-</p>
+Key KCPSM6 signals used by the custom VHDL wrapper:
 
-KCPSM6 interface signals connected in this project:
-
-| Signal | Direction | Project Connection | Purpose in This Design |
-|---|---|---|---|
-| `instruction[17:0]` | Input to KCPSM6 | Connected to `PicoBlaze_Debounce.vhd` / `PicoBlaze_Debounce_tst.vhd` | Provides the current instruction from program memory |
-| `address[11:0]` | Output from KCPSM6 | Connected to program memory address input | Selects the next instruction address |
-| `bram_enable` | Output from KCPSM6 | Connected to program memory enable input | Enables instruction fetch from program memory |
-| `in_port[7:0]` | Input to KCPSM6 | Driven by VHDL input-port decode logic | Provides switch data during `INPUT` from port `0x00` |
-| `out_port[7:0]` | Output from KCPSM6 | Connected to LED register input | Carries output data during `OUTPUT` |
-| `port_id[7:0]` | Output from KCPSM6 | Used by VHDL port-decoding logic | Selects whether PicoBlaze is accessing switch input or LED output |
-| `write_strobe` | Output from KCPSM6 | Used in LED write-enable logic | Indicates a valid `OUTPUT` instruction and allows the LED register to capture `out_port` |
-| `read_strobe` | Output from KCPSM6 | Connected to `open` | Not required because the switch input is continuously available through combinational decode logic |
-| `k_write_strobe` | Output from KCPSM6 | Connected to `open` | Not used because the firmware does not use `OUTPUTK` |
-| `interrupt` | Input to KCPSM6 | Tied to `'0'` | Interrupts are not used in this project |
-| `interrupt_ack` | Output from KCPSM6 | Connected to `open` | Not used because interrupts are disabled |
-| `sleep` | Input to KCPSM6 | Tied to `'0'` | Processor remains active |
-| `reset` | Input to KCPSM6 | Connected to top-level `rst` | Resets the processor |
-| `clk` | Input to KCPSM6 | Connected to top-level `clk` | Drives the synchronous processor logic |
+| Signal | Role in This Project |
+|---|---|
+| `address`, `instruction`, `bram_enable` | Program memory fetch interface |
+| `port_id` | Selects the logical PicoBlaze I/O port |
+| `in_port` | Provides registered switch data to the processor |
+| `out_port` | Carries data written by the processor |
+| `write_strobe` | Qualifies valid output writes to the LED register |
+| `clk`, `reset` | Synchronous clock and processor reset |
 
 ## Development Flow
 
