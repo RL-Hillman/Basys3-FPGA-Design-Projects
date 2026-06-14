@@ -8,8 +8,12 @@ This project implements an embedded calculator system on the Basys3 FPGA board u
 
 The firmware was designed as a compact, resource-aware embedded application. 
 
-The system is controlled through board switches, push buttons, LEDs, a 4-digit 7-segment display, and UART terminal communication.
-
+The system is controlled through a combination of physical board components and serial communication:
+* **UART Terminal:** Used to input the numerical operands (X and Y).
+* **Push Buttons:** Used to execute the mathematical operations (+, -, *, /).
+* **7-Segment & LEDs:** Provide visual feedback indicating the active mode and system status.
+* **DIP Switches (SW15 & SW0):** Used to select the operating mode.
+  
 The calculator supports four operating modes:
 
 | Mode | Switch Setting | Supported Operations |
