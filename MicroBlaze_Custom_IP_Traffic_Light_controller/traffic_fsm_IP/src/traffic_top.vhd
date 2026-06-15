@@ -22,8 +22,8 @@
 --   The switches_in input will come from AXI register 2
 --   inside the custom IP.
 --
---   The state_out output will be connected to AXI register 0.
---   The leds_out output will be connected to AXI register 1
+--   state_out is returned through AXI read address 0x00.
+--   leds_out is returned through AXI read address 0x04
 --   and also to the external LED output port.
 --
 
