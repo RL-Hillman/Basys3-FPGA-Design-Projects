@@ -58,12 +58,11 @@ begin
     begin
         if rising_edge(clk) then
 
-          if rst='0' then 
-           count<= 0;
-          else   
+          if rst='0' or enable='0' then
            
-             if enable = '1' then
-             
+        -- Timer is disabled.
+           count<= 0;
+          else                
                if count = MAX_COUNT - 1 then
                       
                     count<= 0;
@@ -71,16 +70,10 @@ begin
                     count<=count+1;
                     
                end if;
- 
-             else
-                 -- Timer is disabled.
-                 count<= 0;
- 
-             end if;
            end if;
         end if; 
     end process;
     
-done <= '1' when (enable = '1' and count = MAX_COUNT - 1) else '0';
+done <= '1' when (rst='1' and enable = '1' and count = MAX_COUNT - 1) else '0';
 
 end Behavioral;
