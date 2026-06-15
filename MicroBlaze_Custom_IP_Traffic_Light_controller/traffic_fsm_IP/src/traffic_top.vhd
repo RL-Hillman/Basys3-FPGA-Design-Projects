@@ -72,7 +72,9 @@ begin
         port map(
             clk    => clk,
             enable => en_1s,
-            done   => done_1s
+            done   => done_1s,
+            rst=>rst
+            
         );
 
     TIMER_2S : entity work.timer(Behavioral)
@@ -83,7 +85,9 @@ begin
         port map(
             clk    => clk,
             enable => en_2s,
-            done   => done_2s
+            done   => done_2s,
+            rst=>rst
+
         );
 
  
