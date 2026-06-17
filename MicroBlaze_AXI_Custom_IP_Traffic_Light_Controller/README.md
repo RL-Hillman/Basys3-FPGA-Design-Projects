@@ -116,15 +116,14 @@ flowchart TD
     GPIO1 --> SEG[7-Segment Display]
 ```
 
----
 
-### Vivado Block Design
+## Vivado Block Design
 
 ![Vivado Block Design](DOCS/block_design.png)
 
 ---
 
-### Main Vivado Components
+## Main Vivado Components
 
 The following table summarizes the main IP blocks used in the block design and their roles in the system.
 
@@ -141,7 +140,7 @@ The following table summarizes the main IP blocks used in the block design and t
 
 ---
 
-### Address Map
+## Address Map
 
 The address map defines how the MicroBlaze accesses each memory-mapped peripheral. The custom traffic FSM IP is mapped as an AXI4-Lite slave peripheral and is accessed by the software using its base address.
 
