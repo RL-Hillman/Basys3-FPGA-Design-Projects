@@ -219,7 +219,8 @@ DEFAULT_A → DEFAULT_B → DEFAULT_C → DEFAULT_A
 | 1-second timer | Used while cycling through the default states |
 | 2-second timer | Used while serving an active traffic request |
 
-The `timer.vhd` module asserts `done` for one clock cycle when the selected delay expires.  
+The `timer.vhd` module asserts `done` for one clock cycle when the selected delay expires. 
+
 ---
 
 ## AXI4-Lite Interface
