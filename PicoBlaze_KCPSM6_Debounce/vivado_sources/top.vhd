@@ -236,18 +236,9 @@ begin
     -- PicoBlaze ports are 8-bit wide, but this project uses
     -- only the lower 4 bits.
 
-    process(port_id, switch_reg_value)
-    begin
-        case port_id is
-
-            when X"00" =>
-                in_port <= "0000" & switch_reg_value;
-
-            when others =>
-                in_port <= (others => '0');
-
-        end case;
-    end process;
+    with port_id select
+        in_port <= "0000" & switch_reg_value when X"00",
+                   (others => '0')          when others;
 
 
     -- ========================================================
