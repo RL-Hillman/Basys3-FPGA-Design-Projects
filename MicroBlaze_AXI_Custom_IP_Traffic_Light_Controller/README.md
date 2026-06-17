@@ -68,8 +68,10 @@ Each selected Basys 3 switch represents a vehicle request from one direction to 
 
 ### Switch / Vehicle Request Mapping
 
+<div align="center">
+
 | Switch Bit | From | To | Traffic Light Group |
-|---:|---|---|---|
+|---:|---|---|:---:|
 | `SW15` | West | East | C |
 | `SW9`  | West | South | A |
 | `SW8`  | South | West | A |
@@ -77,8 +79,12 @@ Each selected Basys 3 switch represents a vehicle request from one direction to 
 | `SW6`  | East | South | B |
 | `SW0`  | East | West | C |
 
-Only these six switches are used as traffic sensors.  
+</div>
+
+<p align="center">
+Only these six switches are used as traffic sensors.<br>
 All other switch bits are ignored by the traffic controller.
+</p>
 
 ---
 
