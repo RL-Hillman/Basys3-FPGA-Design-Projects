@@ -115,9 +115,14 @@ flowchart TD
     MB --> GPIO1[AXI GPIO 1]
     GPIO1 --> SEG[7-Segment Display]
 ```
+
+---
+
 ### Vivado Block Design
 
 ![Vivado Block Design](DOCS/block_design.png)
+
+---
 
 ### Main Vivado Components
 
@@ -133,6 +138,8 @@ The following table summarizes the main IP blocks used in the block design and t
 | `microblaze_0_axi_periph` | AXI interconnect between MicroBlaze and peripherals |
 | `clk_wiz_1` | Clock generation |
 | `rst_clk_wiz_1_100M` | Reset synchronization |
+
+---
 
 ### Address Map
 
