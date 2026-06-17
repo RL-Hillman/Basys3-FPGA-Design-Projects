@@ -1,11 +1,11 @@
 # MicroBlaze AXI Custom IP Traffic Light Controller
-  <img src="https://img.shields.io/badge/FPGA-Basys%203-blue" />
-  <img src="https://img.shields.io/badge/HDL-VHDL-purple" />
-  <img src="https://img.shields.io/badge/Processor-MicroBlaze-orange" />
-  <img src="https://img.shields.io/badge/Interface-AXI4--Lite-green" />
-  <img src="https://img.shields.io/badge/IP-Custom%20IP-red" />
-  <img src="https://img.shields.io/badge/Tool-Vivado-yellow" />
-  <img src="https://img.shields.io/badge/Software-Embedded%20C-lightgrey" />
+![FPGA](https://img.shields.io/badge/FPGA-Basys%203-blue)
+![HDL](https://img.shields.io/badge/HDL-VHDL-purple)
+![Processor](https://img.shields.io/badge/Processor-MicroBlaze-orange)
+![Interface](https://img.shields.io/badge/Interface-AXI4--Lite-green)
+![IP](https://img.shields.io/badge/IP-Custom%20IP-red)
+![Tool](https://img.shields.io/badge/Tool-Vivado-yellow)
+![Software](https://img.shields.io/badge/Software-Embedded%20C-lightgrey)
 
 ## Overview
 
