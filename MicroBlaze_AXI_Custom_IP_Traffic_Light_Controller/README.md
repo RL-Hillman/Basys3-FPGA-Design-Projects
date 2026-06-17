@@ -63,7 +63,7 @@ The controller models a traffic junction with three traffic-light groups: **A**,
 Each selected Basys 3 switch represents a vehicle request from one direction to another. The FSM receives these switch inputs and decides which traffic light group should be active.
 
 <p align="center">
-  <img src="DOCS/junction_layout.png" alt="Traffic Junction Layout" width="650"/>
+  <img src="DOCS/junction_layout.png" alt="Traffic Junction Layout" width="500"/>
 </p>
 
 ### Switch / Vehicle Request Mapping
