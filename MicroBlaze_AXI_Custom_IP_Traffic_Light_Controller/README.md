@@ -212,7 +212,7 @@ The default cycle is:
 DEFAULT_A → DEFAULT_B → DEFAULT_C → DEFAULT_A
 ```
 
-### Timer Usage
+### FSM Timing Control
 
 | Timer | Purpose |
 |---|---|
@@ -220,8 +220,6 @@ DEFAULT_A → DEFAULT_B → DEFAULT_C → DEFAULT_A
 | 2-second timer | Used while serving an active traffic request |
 
 The `timer.vhd` module asserts `done` for one clock cycle when the selected delay expires.  
-For hardware implementation, the timers use the Basys 3 clock frequency of 100 MHz.
-
 ---
 
 ## AXI4-Lite Interface
@@ -237,19 +235,6 @@ The custom IP exposes four 32-bit AXI4-Lite registers. The MicroBlaze writes the
 | `0x08` | Switch Register | Write | Switch/request input written by MicroBlaze |
 | `0x0C` | Reserved | - | Unused |
 
-### Register Behavior
-
-- Register `0x00` returns the current FSM state from `state_out`.
-- Register `0x04` returns the current LED vector from `leds_out`.
-- Register `0x08` stores the switch vector written by MicroBlaze.
-- Register `0x0C` is currently unused.
-
-The traffic FSM uses only the relevant switch bits:
-
-```text
-SW15, SW9, SW8, SW7, SW6, SW0
-```
-
 ---
 
 ## MicroBlaze Software
@@ -260,17 +245,6 @@ The software does not decide which traffic light should be active.
 That decision is made by the VHDL FSM inside the custom IP.
 
 Instead, the software performs system-level control and monitoring.
-
-### Software Tasks
-
-| Software Task | Description |
-|---|---|
-| Read switches | Reads physical switch values through AXI GPIO |
-| Write requests | Writes the switch vector to the custom AXI IP |
-| Read FSM state | Reads the current hardware FSM state |
-| Read LED output | Reads the LED vector from the custom IP |
-| Display output | Updates the 7-segment display according to the current FSM state |
-| Debug/status | Prints system updates through AXI UARTLite |
 
 ### 7-Segment Display
 
@@ -286,7 +260,7 @@ The 7-segment display shows the currently active traffic-light group.
 | `B_ON` | `B` |
 | `C_ON` | `C` |
 
-### Software Memory Footprint
+### Software Build Size
 
 The compiled MicroBlaze software size was measured using the ELF size report:
 
@@ -303,6 +277,9 @@ text    data    bss     dec     hex     filename
 | Total | 16,680 | Total memory footprint |
 | Hex | `0x4128` | Total size in hexadecimal |
 
+The total software footprint is approximately **16.3 KB**.  
+In this design, the MicroBlaze local memory range is `0x00000000` to `0x0001FFFF`, which provides **128 KB** of local memory. Therefore, the application uses only about **12.7%** of the available local memory.
+
 ---
 
 ## Simulation and Verification
@@ -313,16 +290,22 @@ The simulation uses `tb_traffic_top.vhd`, which instantiates the internal `traff
 
 ![Traffic FSM Simulation](DOCS/tb_traffic.png)
 
+### Waveform Interpretation
+
+In the shown simulation window, the switch vector changes between different request combinations.  
+The decoded request signals `req_A`, `req_B`, and `req_C` respond according to the active switch bits.
+
+The `en_1s` and `en_2s` signals indicate which timer is currently enabled.  
+The `done_1s` and `done_2s` pulses show when the selected timer has finished counting and the FSM is allowed to transition.
+
+The FSM transitions between states such as `A_ON`, `AB_ON`, `DEFAULT_A`, and `C_ON`.  
+The `state_out` / `current_state` signals show the active FSM state, and `leds_out[15:0]` changes according to that state.
+
+Overall, the waveform confirms that the requests are decoded correctly, the timers control the state transitions, and the LED output matches the active traffic-light state.
+
 ### Verification Summary
 
-| Item | Description |
-|---|---|
-| Testbench | `tb_traffic_top.vhd` |
-| Unit under test | `traffic_top.vhd` |
-| Tested inputs | `SW15`, `SW9`, `SW8`, `SW7`, `SW6`, `SW0` |
-| Input combinations | `2^6 = 64` |
-| Checked outputs | FSM state and LED vector |
-| Purpose | Verify all traffic request combinations |
+
 
 ### Simulation Timing
 
