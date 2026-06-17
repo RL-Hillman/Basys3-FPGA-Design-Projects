@@ -290,8 +290,6 @@ The simulation uses `tb_traffic_top.vhd`, which instantiates the internal `traff
 
 ![Traffic FSM Simulation](DOCS/tb_traffic.png)
 
-### Waveform Interpretation
-
 In the shown simulation window, the switch vector changes between different request combinations.  
 The decoded request signals `req_A`, `req_B`, and `req_C` respond according to the active switch bits.
 
