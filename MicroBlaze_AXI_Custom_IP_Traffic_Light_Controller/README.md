@@ -66,10 +66,6 @@ Each selected Basys 3 switch represents a vehicle request from one direction to 
   <img src="DOCS/junction_layout.png" alt="Traffic Junction Layout" width="650"/>
 </p>
 
-<p align="center">
-  <b>Traffic junction layout and traffic-light groups</b>
-</p>
-
 ### Switch / Vehicle Request Mapping
 
 | Switch Bit | From | To | Traffic Light Group |
