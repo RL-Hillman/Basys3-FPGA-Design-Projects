@@ -138,7 +138,6 @@ The following table summarizes the main IP blocks used in the block design and t
 | `clk_wiz_1` | Clock generation |
 | `rst_clk_wiz_1_100M` | Reset synchronization |
 
----
 
 ## Address Map
 
