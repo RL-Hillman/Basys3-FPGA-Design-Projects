@@ -68,6 +68,7 @@ Each selected Basys 3 switch represents a vehicle request from one direction to 
 
 
 <div align="center">
+  
 ### Switch / Vehicle Request Mapping
 
 | Switch Bit | From | To | Traffic Light Group |
