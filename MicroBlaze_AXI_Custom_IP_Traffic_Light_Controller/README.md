@@ -115,10 +115,13 @@ flowchart TD
     MB --> GPIO1[AXI GPIO 1]
     GPIO1 --> SEG[7-Segment Display]
 ```
+### Vivado Block Design
 
 ![Vivado Block Design](DOCS/block_design.png)
 
 ### Main Vivado Components
+
+The following table summarizes the main IP blocks used in the block design and their roles in the system.
 
 | Component | Role |
 |---|---|
@@ -133,15 +136,9 @@ flowchart TD
 
 ### Address Map
 
-![MicroBlaze Address Map](DOCS/address_map.png)
+The address map defines how the MicroBlaze accesses each memory-mapped peripheral. The custom traffic FSM IP is mapped as an AXI4-Lite slave peripheral and is accessed by the software using its base address.
 
-| Peripheral | Base Address | High Address | Purpose |
-|---|---:|---:|---|
-| `axi_gpio_0` | `0x40000000` | `0x4000FFFF` | Switch input |
-| `axi_gpio_1` | `0x40010000` | `0x4001FFFF` | 7-segment output |
-| `traffic_fsm_0` | `0x44A00000` | `0x44A0FFFF` | Custom AXI traffic FSM IP |
-| `axi_uartlite_0` | `0x40600000` | `0x4060FFFF` | UART communication |
-| `microblaze_0_local_memory` | `0x00000000` | `0x0001FFFF` | MicroBlaze local memory |
+![MicroBlaze Address Map](DOCS/address_map.png)
 
 ---
 
