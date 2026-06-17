@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project implements an FPGA-based traffic light controller on the **Basys 3** board using **VHDL**, a **MicroBlaze soft processor**, and a custom **AXI4-Lite IP core**.
+This project implements an FPGA-based traffic light controller on the **Basys 3** board using **VHDL**, **MicroBlaze soft processor**, and a custom **AXI4-Lite IP core**.
 
 The traffic-control logic is implemented in hardware as a finite state machine (FSM). The MicroBlaze processor is used to read the physical switch inputs, forward them to the custom AXI IP, monitor the FSM state, read the LED output, drive the 7-segment display, and print status information through UART.
 
@@ -62,7 +62,13 @@ The controller models a traffic junction with three traffic-light groups: **A**,
 
 Each selected Basys 3 switch represents a vehicle request from one direction to another. The FSM receives these switch inputs and decides which traffic light group should be active.
 
-![Traffic Junction Layout](DOCS/junction_layout.png)
+<p align="center">
+  <img src="DOCS/junction_layout.png" alt="Traffic Junction Layout" width="650"/>
+</p>
+
+<p align="center">
+  <b>Traffic junction layout and traffic-light groups</b>
+</p>
 
 ### Switch / Vehicle Request Mapping
 
@@ -84,20 +90,27 @@ All other switch bits are ignored by the traffic controller.
 
 The system is built around a MicroBlaze processor connected to several AXI peripherals.
 
-The physical switches are read through an AXI GPIO peripheral. The MicroBlaze then writes the switch vector into the custom AXI4-Lite traffic FSM IP. The custom IP contains the VHDL traffic controller and exposes the current FSM state and LED output through AXI-readable registers.
+The physical switches are read through `axi_gpio_0`. The MicroBlaze software reads these switch values and writes the switch vector into the custom AXI4-Lite traffic FSM IP. Inside the custom IP, the VHDL traffic controller uses this vector as the vehicle request input.
 
-```text
-Basys 3 Switches
-      ↓
-AXI GPIO
-      ↓
-MicroBlaze Software
-      ↓
-AXI4-Lite Custom IP
-      ↓
-VHDL Traffic Controller
-      ↓
-LED Outputs
+The traffic FSM generates the LED output directly from hardware. In parallel, the current FSM state and LED vector are exposed through AXI readable registers, allowing the MicroBlaze software to monitor the hardware state.
+
+The MicroBlaze also uses the current FSM state to update the 7-segment display through `axi_gpio_1`.
+
+```mermaid
+flowchart TD
+    SW[Basys 3 Switches] --> GPIO0[AXI GPIO 0]
+    GPIO0 --> MB[MicroBlaze Software]
+
+    MB -->|Write switch vector<br/>AXI offset 0x08| AXI_REGS[AXI4-Lite Registers]
+    AXI_REGS --> CORE[Custom Traffic FSM IP]
+    CORE --> HW[VHDL FSM + Timers]
+    HW --> LEDS[Basys 3 LEDs]
+
+    CORE -->|Read state<br/>offset 0x00| MB
+    CORE -->|Read LED vector<br/>offset 0x04| MB
+
+    MB --> GPIO1[AXI GPIO 1]
+    GPIO1 --> SEG[7-Segment Display]
 ```
 
 ![Vivado Block Design](DOCS/block_design.png)
