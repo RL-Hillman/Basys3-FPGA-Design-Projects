@@ -117,6 +117,7 @@ flowchart TD
 ```
 
 <div align="center">
+  
 ### Vivado Block Design
 </div>
 
@@ -193,6 +194,7 @@ The AXI wrapper instantiates `traffic_top` inside the custom IP and connects it 
 | C | `LED8` |
 
 <div align="center">
+  
 ### FSM Diagram
 </div>
 
@@ -202,6 +204,7 @@ When no vehicle request is active, the FSM cycles between the default states.
 When a request is detected, the FSM moves to the matching service state.
 
 <div align="center">
+  
 ### Default State Cycle
 
 ![Default State Cycle](DOCS/default_state_cycle.png)
