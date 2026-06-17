@@ -1,6 +1,6 @@
 # MicroBlaze AXI Custom IP Traffic Light Controller
 
-## 1. Overview
+## Overview
 
 This project implements an FPGA-based traffic light controller on the **Basys 3** board using **VHDL**, a **MicroBlaze soft processor**, and a custom **AXI4-Lite IP core**.
 
@@ -19,7 +19,7 @@ The main design idea is that the **traffic decision logic runs fully in hardware
 
 ---
 
-## 2. Repository Structure
+## Repository Structure
 
 ```text
 MicroBlaze_AXI_Custom_IP_Traffic_Light_Controller/
@@ -56,7 +56,7 @@ MicroBlaze_AXI_Custom_IP_Traffic_Light_Controller/
 
 ---
 
-## 3. Traffic Junction and Input Mapping
+## Traffic Junction and Input Mapping
 
 The controller models a traffic junction with three traffic-light groups: **A**, **B**, and **C**.
 
@@ -80,7 +80,7 @@ All other switch bits are ignored by the traffic controller.
 
 ---
 
-## 4. System Architecture and Vivado Block Design
+## System Architecture and Vivado Block Design
 
 The system is built around a MicroBlaze processor connected to several AXI peripherals.
 
@@ -129,7 +129,7 @@ LED Outputs
 
 ---
 
-## 5. Hardware Design and FSM Logic
+## Hardware Design and FSM Logic
 
 The hardware logic is written in VHDL. The internal traffic controller is separated from the AXI wrapper, which makes the FSM easier to simulate and verify independently.
 
@@ -203,7 +203,7 @@ For hardware implementation, the timers use the Basys 3 clock frequency of 100 M
 
 ---
 
-## 6. AXI4-Lite Interface
+## AXI4-Lite Interface
 
 The custom IP exposes four 32-bit AXI4-Lite registers. The MicroBlaze writes the switch vector into the custom IP and reads back the current FSM state and LED output.
 
@@ -231,7 +231,7 @@ SW15, SW9, SW8, SW7, SW6, SW0
 
 ---
 
-## 7. MicroBlaze Software
+## MicroBlaze Software
 
 The MicroBlaze software is implemented in `SDK_code/main.c`.
 
@@ -284,7 +284,7 @@ text    data    bss     dec     hex     filename
 
 ---
 
-## 8. Simulation and Verification
+## Simulation and Verification
 
 The VHDL testbench verifies the traffic controller hardware independently from the MicroBlaze processor.
 
@@ -322,7 +322,7 @@ This makes the waveform easier to inspect and keeps the simulation runtime short
 
 ---
 
-## 9. How to Run
+## How to Run
 
 ### Run Behavioral Simulation
 
