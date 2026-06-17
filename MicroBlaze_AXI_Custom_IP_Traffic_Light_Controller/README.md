@@ -116,14 +116,15 @@ flowchart TD
     GPIO1 --> SEG[7-Segment Display]
 ```
 
-
-## Vivado Block Design
+<div align="center">
+### Vivado Block Design
+</div>
 
 ![Vivado Block Design](DOCS/block_design.png)
 
 ---
 
-## Main Vivado Components
+### Main Vivado Components
 
 The following table summarizes the main IP blocks used in the block design and their roles in the system.
 
@@ -139,12 +140,11 @@ The following table summarizes the main IP blocks used in the block design and t
 | `rst_clk_wiz_1_100M` | Reset synchronization |
 
 
-## Address Map
+### Address Map
 
 The address map defines how the MicroBlaze accesses each memory-mapped peripheral. The custom traffic FSM IP is mapped as an AXI4-Lite slave peripheral and is accessed by the software using its base address.
 
 ![MicroBlaze Address Map](DOCS/address_map.png)
-
 ---
 
 ## Hardware Design and FSM Logic
@@ -192,17 +192,20 @@ The AXI wrapper instantiates `traffic_top` inside the custom IP and connects it 
 | B | `LED0` |
 | C | `LED8` |
 
+<div align="center">
 ### FSM Diagram
+</div>
 
 ![Traffic FSM Diagram](DOCS/fsm_main_diagram.png)
 
 When no vehicle request is active, the FSM cycles between the default states.  
 When a request is detected, the FSM moves to the matching service state.
 
+<div align="center">
 ### Default State Cycle
 
 ![Default State Cycle](DOCS/default_state_cycle.png)
-
+</div>
 The default cycle is:
 
 ```text
