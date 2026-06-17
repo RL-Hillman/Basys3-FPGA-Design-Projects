@@ -196,14 +196,11 @@ The AXI wrapper instantiates `traffic_top` inside the custom IP and connects it 
 <div align="center">
   
 ### FSM Diagram
-</div>
-
-![Traffic FSM Diagram](DOCS/fsm_main_diagram.png)
-
 When no vehicle request is active, the FSM cycles between the default states.  
 When a request is detected, the FSM moves to the matching service state.
+![Traffic FSM Diagram](DOCS/fsm_main_diagram.png)
 
-<div align="center">
+
   
 ### Default State Cycle
 
