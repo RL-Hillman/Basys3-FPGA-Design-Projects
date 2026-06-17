@@ -300,11 +300,7 @@ The `done_1s` and `done_2s` pulses show when the selected timer has finished cou
 The FSM transitions between states such as `A_ON`, `AB_ON`, `DEFAULT_A`, and `C_ON`.  
 The `state_out` / `current_state` signals show the active FSM state, and `leds_out[15:0]` changes according to that state.
 
-Overall, the waveform confirms that the requests are decoded correctly, the timers control the state transitions, and the LED output matches the active traffic-light state.
-
-### Verification Summary
-
-
+Overall, the waveform confirms that the requests are decoded correctly, the timers control the state transitions and the LED output matches the active traffic-light state.
 
 ### Simulation Timing
 
@@ -324,44 +320,6 @@ This allows the testbench to simulate the 1-second and 2-second timers much fast
 This makes the waveform easier to inspect and keeps the simulation runtime short.
 
 ---
-
-## How to Run
-
-### Run Behavioral Simulation
-
-1. Open Vivado.
-2. Add the VHDL source files from:
-
-```text
-traffic_fsm_IP/src/
-```
-
-3. Add the simulation file from:
-
-```text
-traffic_fsm_IP/sim/tb_traffic_top.vhd
-```
-
-4. Run behavioral simulation.
-5. Check the FSM state transitions and LED output vector in the waveform.
-
-### Run on Basys 3 Hardware
-
-1. Open the Vivado project.
-2. Open the block design.
-3. Generate the bitstream.
-4. Export the hardware including the bitstream.
-5. Open Vitis.
-6. Build the MicroBlaze software application from:
-
-```text
-SDK_code/main.c
-```
-
-7. Program the Basys 3 board.
-8. Run the MicroBlaze application.
-9. Use the Basys 3 switches to generate vehicle requests.
-10. Observe the traffic-light outputs on the LEDs and the current state on the 7-segment display.
 
 ## Summary
 
