@@ -444,8 +444,8 @@ begin
 --   leds_from_fsm(15 downto 0)  <-- LED pattern
 --
 -- These signals are returned to MicroBlaze through the AXI read logic:
---   Register 0 returns state_from_fsm
---   Register 1 returns leds_from_fsm	
+--   Register 0 address returns state_from_fsm
+--   Register 1 address returns leds_from_fsm	
 	
 TRAFFIC_TOP_U : traffic_top
     generic map(
