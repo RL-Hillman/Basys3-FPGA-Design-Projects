@@ -1,59 +1,104 @@
 # FPGA Basys3 VHDL Projects 🚀
 
-[![Hardware](https://img.shields.io/badge/Hardware-Basys3_Artix--7-blue.svg)](#)
-[![Language](https://img.shields.io/badge/HDL-VHDL-orange.svg)](#)
-[![Firmware](https://img.shields.io/badge/Firmware-C_|_Assembly-lightgrey.svg)](#)
-[![Tools](https://img.shields.io/badge/Tools-Xilinx_Vivado-red.svg)](#)
+<p align="center">
+  <img src="docs/images/fpga_basys3_banner.png" alt="FPGA Basys3 Projects Banner" width="100%">
+</p>
 
-## 📌 Overview
-This repository contains a comprehensive collection of practical FPGA projects developed on the **Basys3 (Xilinx Artix-7)** development board[cite: 1, 2, 3, 4]. The projects showcase a clear progression from foundational digital logic design in VHDL to advanced hardware-software co-design utilizing soft-core processors[cite: 1, 2, 3, 4].
+<p align="center">
+  <img src="https://img.shields.io/badge/HDL-VHDL-blue?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Tool-Xilinx%20Vivado-red?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Board-Basys3-green?style=for-the-badge">
+  <img src="https://img.shields.io/badge/FPGA-Artix--7-orange?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Processor-MicroBlaze-purple?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Processor-KCPSM6%20PicoBlaze-yellow?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Interface-AXI4--Lite-6f42c1?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Firmware-C%20%7C%20Assembly-lightgrey?style=for-the-badge">
+</p>
 
-The primary focus is on **Embedded Real-Time Engineering**, demonstrating proficiency in:
-* RTL Design and modular VHDL architecture[cite: 1, 2, 4].
-* Soft-core Processor Integration (MicroBlaze, PicoBlaze / KCPSM6)[cite: 1, 2, 3].
-* Custom AXI4-Lite IP creation and memory-mapped interfaces[cite: 2].
-* Low-level Bare-Metal Firmware Development (C and Assembly)[cite: 1, 2, 3].
-* Standard communication protocols and peripheral control (UART-Lite, AXI GPIO, 7-Segment Multiplexing)[cite: 2, 3, 4].
+## Overview
 
----
+This repository contains a collection of FPGA projects developed on the **Digilent Basys3 / Xilinx Artix-7** development board using **VHDL**, **Xilinx Vivado**, and Xilinx soft processors.
 
-## 📂 Projects Directory
+The projects range from standalone RTL designs to embedded FPGA systems based on **MicroBlaze**, **KCPSM6 PicoBlaze**, and custom **AXI4-Lite** peripherals.
 
-### 1. [MicroBlaze AXI Custom IP Traffic Light Controller](./MicroBlaze_AXI_Custom_IP_Traffic_Light_Controller)
-An FPGA-based traffic light controller combining a custom VHDL finite state machine (FSM) with a MicroBlaze soft processor[cite: 2]. 
-* **Key Features:** The traffic decision logic runs fully in hardware, while the MicroBlaze handles system monitoring and user interface tasks via a custom AXI4-Lite IP core[cite: 2]. 
-* **Tech Stack:** MicroBlaze, Custom AXI4-Lite IP, VHDL, Embedded C[cite: 2].
+Each project is self-contained and includes source files, constraints, simulation material, implementation details, and project-specific documentation.
 
-### 2. [MicroBlaze Calculator System](./MicroBlaze_Calculator_System)
-A compact, resource-aware embedded calculator system controlled via physical board components and UART serial communication[cite: 3].
-* **Key Features:** Features bare-metal modular C firmware with non-blocking UART input handling, manual floating-point parsing, and state-machine-based calculator logic utilizing only ~28.3 KiB of static memory[cite: 3].
-* **Tech Stack:** MicroBlaze, AXI GPIO, AXI UART-Lite, Embedded C[cite: 3].
+## Projects
 
-### 3. [KCPSM6 PicoBlaze Switch Debounce System](./PicoBlaze_KCPSM6_Debounce)
-A hardware/software co-design implementing a switch debounce algorithm using the ultra-compact KCPSM6 PicoBlaze soft processor[cite: 1].
-* **Key Features:** Offloads sequential debounce logic to a soft-core processor using PicoBlaze assembly firmware, integrating the processor core into a VHDL top-level design with custom I/O port decoding[cite: 1].
-* **Tech Stack:** KCPSM6 PicoBlaze, VHDL, PicoBlaze Assembly[cite: 1].
+| # | Project | Description | Main Topics |
+|---:|---|---|---|
+| 1 | **[MicroBlaze AXI Custom IP Traffic Light Controller](./MicroBlaze_AXI_Custom_IP_Traffic_Light_Controller)** | FPGA-based traffic light controller combining a custom VHDL FSM, hardware timers, AXI4-Lite register interface, and MicroBlaze software for monitoring and display control. | `MicroBlaze` `AXI4-Lite` `Custom IP` `VHDL` `Embedded C` |
+| 2 | **[MicroBlaze Calculator System](./MicroBlaze_Calculator_System)** | Bare-metal calculator system using MicroBlaze, AXI GPIO, UART-Lite, push buttons, switches, LEDs, and seven-segment display control. | `MicroBlaze` `Embedded C` `AXI GPIO` `UART-Lite` |
+| 3 | **[KCPSM6 PicoBlaze Switch Debounce System](./PicoBlaze_KCPSM6_Debounce)** | Switch debounce system implemented with PicoBlaze assembly firmware integrated into a VHDL top-level design with custom I/O port decoding. | `PicoBlaze` `Assembly` `VHDL` `I/O Ports` |
+| 4 | **[3-Digit Multiplexed 7-Segment Counter](./3_Digit_Decimal_Counter)** | Modular VHDL decimal counter with clock division, cascaded digit counters, multiplexed seven-segment display control, and simulation testbenches. | `VHDL` `RTL` `Counters` `7-Segment` |
 
-### 4. [3-Digit Multiplexed 7-Segment Counter](./3_Digit_Decimal_Counter)
-A modular 3-digit decimal counter system built entirely in VHDL, counting up to a user-selected terminal value[cite: 4].
-* **Key Features:** Implements parameterized clock division, dynamic 7-segment display multiplexing, and synchronous control logic for terminal-count detection[cite: 4].
-* **Tech Stack:** VHDL, RTL Simulation[cite: 4].
+## Development Environment
 
----
+| Category | Tools / Technologies |
+|---|---|
+| FPGA Board | Digilent Basys3 |
+| FPGA Device | Xilinx Artix-7 |
+| HDL | VHDL |
+| Toolchain | Xilinx Vivado |
+| Soft Processors | MicroBlaze, KCPSM6 PicoBlaze |
+| Firmware | Embedded C, PicoBlaze Assembly |
+| Interfaces | AXI4-Lite, AXI GPIO, UART-Lite |
+| Verification | Vivado Behavioral Simulation, VHDL Testbenches |
+| Board I/O | Switches, Push Buttons, LEDs, Seven-Segment Display, UART |
 
-## 🛠️ Skills & Technologies Demonstrated
+## Repository Structure
 
-* **Hardware Description:** VHDL (FSMs, Modular Architecture, Testbenches)[cite: 1, 2, 4].
-* **Embedded Software:** C (Bare-metal, Memory Optimization), KCPSM6 Assembly[cite: 1, 2, 3].
-* **System Design:** Hardware/Software Co-design, AXI4-Lite Interconnects, Address Mapping[cite: 1, 2, 3].
-* **Development Tools:** Xilinx Vivado Design Suite, Xilinx SDK, pBlazIDE[cite: 1, 3].
-* **Interfaces & Peripherals:** UART, GPIO, Hardware Timers, 7-Segment Displays, Switches/LEDs[cite: 1, 2, 3, 4].
+```text
+FPGA_Basys3_VHDL_Projects/
+│
+├── MicroBlaze_AXI_Custom_IP_Traffic_Light_Controller/
+│   ├── DOCS/
+│   ├── SDK_code/
+│   ├── traffic_fsm_IP/
+│   └── README.md
+│
+├── MicroBlaze_Calculator_System/
+│   ├── docs/
+│   ├── SDK_code/
+│   └── README.md
+│
+├── PicoBlaze_KCPSM6_Debounce/
+│   ├── vivado_sources/
+│   ├── firmware/
+│   ├── sim/
+│   ├── constraints/
+│   └── README.md
+│
+├── 3_Digit_Decimal_Counter/
+│   ├── src/
+│   ├── sim/
+│   ├── constraints/
+│   └── README.md
+│
+└── README.md
+```
 
----
+## Project Focus
 
-## 👨‍💻 About the Author
-**Harel Hillman**
-Electrical Engineering student specializing in Embedded Systems, RTL Design, and Low-Level Firmware. Passionate about bringing hardware and software together to build optimized, real-time architectures.
+The repository emphasizes practical FPGA development with a focus on:
 
-* **LinkedIn:** [Insert Link]
-* **Email:** [Insert Email]
+- Modular VHDL design
+- Finite state machines
+- Custom AXI4-Lite peripheral integration
+- Embedded soft-processor systems
+- Bare-metal firmware
+- Board-level I/O control
+- Behavioral simulation and verification
+- Hardware/software co-design
+
+## Author
+
+**Harel Hillman**  
+Electrical Engineering student focused on FPGA design, embedded systems, RTL development, and low-level firmware.
+
+- LinkedIn: `[Insert LinkedIn URL]`
+- Email: `[Insert Email]`
+
+<p align="center">
+  <b>Designed, implemented, simulated, and verified on Digilent Basys3 using Xilinx Vivado.</b>
+</p>
