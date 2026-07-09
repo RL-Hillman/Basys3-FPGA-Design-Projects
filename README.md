@@ -172,38 +172,44 @@ flowchart TD
 | Verification | Vivado Behavioral Simulation, VHDL Testbenches |
 
 ---
-
 ## Repository Structure
 
 ```text
 FPGA_Basys3_VHDL_Projects/
 │
+├── README.md
+│
+├── docs/
+│
 ├── MicroBlaze_AXI_Custom_IP_Traffic_Light_Controller/
 │   ├── DOCS/
 │   ├── SDK_code/
+│   ├── constrs/
 │   ├── traffic_fsm_IP/
 │   └── README.md
 │
 ├── MicroBlaze_Calculator_System/
 │   ├── docs/
-│   ├── SDK_code/
+│   ├── src/
 │   └── README.md
 │
 ├── PicoBlaze_KCPSM6_Debounce/
 │   ├── vivado_sources/
 │   ├── firmware/
-│   ├── sim/
 │   ├── constraints/
+│   ├── sim/
+│   ├── tools/
+│   ├── docs/
 │   └── README.md
 │
-├── 3_Digit_Decimal_Counter/
-│   ├── src/
-│   ├── sim/
-│   ├── constraints/
-│   └── README.md
-│
-└── README.md
+└── 3_Digit_Decimal_Counter/
+    ├── src/
+    ├── sim/
+    ├── constraints/
+    ├── images/
+    └── README.md
 ```
+
 
 ---
 
