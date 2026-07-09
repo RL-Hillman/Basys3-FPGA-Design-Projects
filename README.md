@@ -24,7 +24,7 @@ This repository contains a collection of FPGA projects developed for the **Digil
 
 The projects move from standalone RTL designs to complete embedded FPGA systems using **MicroBlaze**, **KCPSM6 PicoBlaze**, custom **AXI4-Lite** peripherals, board-level I/O, firmware, and simulation testbenches.
 
-Each project is self-contained and includes its own source files, constraints, simulation material, implementation notes, diagrams, and README documentation.
+Each project is self contained and includes its own source files, constraints, simulation material, implementation notes, diagrams, and README documentation.
 
 ---
 
