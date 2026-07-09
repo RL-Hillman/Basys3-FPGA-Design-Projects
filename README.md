@@ -215,8 +215,9 @@ FPGA_Basys3_VHDL_Projects/
 
 ## Author
 
-**Harel Hillman**  
-Electrical Engineering student focused on FPGA design, embedded systems, RTL development, and low-level firmware.
+**Harel Hillman**
+
+FPGA & Embedded Systems Engineer specializing in VHDL, custom AXI IP development, hardware/software co-design, and bare-metal embedded firmware.
 
 <p align="center">
   <b>Designed, implemented, simulated, and verified on Digilent Basys3 using Xilinx Vivado.</b>
