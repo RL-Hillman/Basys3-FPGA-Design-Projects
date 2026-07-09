@@ -37,7 +37,7 @@ Each project is self-contained and includes its own source files, constraints, s
 </td>
 <td width="62%">
 
-### 🚦 [MicroBlaze AXI Custom IP Traffic Light Controller](./MicroBlaze_AXI_Custom_IP_Traffic_Light_Controller)
+### [MicroBlaze AXI Custom IP Traffic Light Controller](./MicroBlaze_AXI_Custom_IP_Traffic_Light_Controller)
 
 Hardware/software co-design built around a custom **AXI4-Lite traffic-light controller IP**.  
 The traffic decision logic runs in VHDL hardware as an FSM with hardware timers, while the MicroBlaze processor handles monitoring, switch input forwarding, UART status output, and seven-segment display control.
@@ -55,7 +55,7 @@ The traffic decision logic runs in VHDL hardware as an FSM with hardware timers,
 </td>
 <td width="62%">
 
-### 🧮 [MicroBlaze Calculator System](./MicroBlaze_Calculator_System)
+### [MicroBlaze Calculator System](./MicroBlaze_Calculator_System)
 
 Bare-metal calculator system running on a **MicroBlaze soft processor**.  
 The system combines UART-Lite input, AXI GPIO peripherals, push-button operation selection, switch-based mode control, LEDs, and seven-segment display output.
@@ -73,7 +73,7 @@ The system combines UART-Lite input, AXI GPIO peripherals, push-button operation
 </td>
 <td width="62%">
 
-### 🔘 [KCPSM6 PicoBlaze Switch Debounce System](./PicoBlaze_KCPSM6_Debounce)
+### [KCPSM6 PicoBlaze Switch Debounce System](./PicoBlaze_KCPSM6_Debounce)
 
 Switch debounce system implemented using the **KCPSM6 PicoBlaze** soft processor.  
 The debounce algorithm runs as PicoBlaze assembly firmware, while the surrounding VHDL system handles program memory integration, I/O port decoding, switch sampling, and LED output storage.
@@ -91,7 +91,7 @@ The debounce algorithm runs as PicoBlaze assembly firmware, while the surroundin
 </td>
 <td width="62%">
 
-### 🔢 [3-Digit Multiplexed 7-Segment Counter](./3_Digit_Decimal_Counter)
+### [3-Digit Multiplexed 7-Segment Counter](./3_Digit_Decimal_Counter)
 
 Modular VHDL counter system for the Basys3 seven-segment display.  
 The design includes clock division, cascaded decimal counters, display refresh logic, digit selection, segment decoding, terminal-count detection, and testbenches for both full-system and component-level verification.
