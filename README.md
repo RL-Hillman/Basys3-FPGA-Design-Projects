@@ -111,7 +111,7 @@ The design includes clock division, cascaded decimal counters, display refresh l
 <td align="center" width="20%"><b>RTL Design</b><br>VHDL modules, counters, FSMs, timers, display logic</td>
 <td align="center" width="20%"><b>Embedded Systems</b><br>MicroBlaze and PicoBlaze based FPGA systems</td>
 <td align="center" width="20%"><b>Custom IP</b><br>AXI4-Lite peripheral design and register mapping</td>
-<td align="center" width="20%"><b>Firmware</b><br>Bare-metal C and PicoBlaze assembly</td>
+<td align="center" width="20%"><b>Firmware</b><br>Bare metal C and PicoBlaze assembly</td>
 <td align="center" width="20%"><b>Verification</b><br>Vivado behavioral simulation and VHDL testbenches</td>
 </tr>
 </table>
