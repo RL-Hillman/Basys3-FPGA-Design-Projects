@@ -8,8 +8,7 @@
   <img src="https://img.shields.io/badge/HDL-VHDL-1f6feb?style=for-the-badge" alt="VHDL">
   <img src="https://img.shields.io/badge/FPGA-Basys3%20%7C%20Artix--7-238636?style=for-the-badge" alt="Basys3 Artix-7">
   <img src="https://img.shields.io/badge/Tool-Xilinx%20Vivado-da3633?style=for-the-badge" alt="Xilinx Vivado">
-  <img src="https://img.shields.io/badge/Processor-MicroBlaze-f7811d?style=for-the-badge" alt="MicroBlaze">
-  <img src="https://img.shields.io/badge/Processor-KCPSM6%20PicoBlaze-d29922?style=for-the-badge" alt="PicoBlaze">
+  <img src="https://img.shields.io/badge/Soft%20Processors-MicroBlaze%20%7C%20KCPSM6%20PicoBlaze-f7811d?style=for-the-badge" alt="MicroBlaze and KCPSM6 PicoBlaze">
   <img src="https://img.shields.io/badge/Interface-AXI4--Lite-8957e5?style=for-the-badge" alt="AXI4-Lite">
 </p>
 
@@ -122,18 +121,37 @@ The design includes clock division, cascaded decimal counters, display refresh l
 ## Development Flow
 
 ```mermaid
-flowchart LR
-    A[RTL Modules] --> B[Vivado Project]
-    B --> C[Simulation]
-    C --> D[Constraints]
-    D --> E[Synthesis & Implementation]
-    E --> F[Bitstream]
-    F --> G[Basys3 Hardware]
+flowchart TD
+    A[Project Source Files] --> B{Project Type}
 
-    H[Embedded C / Assembly] --> I[Soft Processor System]
-    I --> B
+    B --> C[Standalone RTL Design]
+    B --> D[Embedded FPGA System]
 
-    J[Custom AXI4-Lite IP] --> I
+    C --> C1[VHDL Modules]
+    C1 --> C2[Testbench Simulation]
+    C2 --> C3[XDC Constraints]
+    C3 --> C4[Synthesis & Implementation]
+    C4 --> C5[Bitstream]
+    C5 --> C6[Basys3 Hardware Test]
+
+    D --> D1[Soft Processor System]
+    D1 --> D2{Processor Type}
+
+    D2 --> E[MicroBlaze System]
+    D2 --> F[KCPSM6 PicoBlaze System]
+
+    E --> E1[AXI GPIO / UART-Lite / Custom AXI IP]
+    E1 --> E2[Vivado Block Design]
+    E2 --> E3[Hardware Export]
+    E3 --> E4[Embedded C Firmware]
+    E4 --> E5[Program FPGA and Run on Basys3]
+
+    F --> F1[PicoBlaze Assembly Firmware]
+    F1 --> F2[Program ROM Generation]
+    F2 --> F3[VHDL Top-Level Integration]
+    F3 --> F4[Simulation]
+    F4 --> F5[Synthesis & Bitstream]
+    F5 --> F6[Basys3 Hardware Test]
 ```
 
 ---
