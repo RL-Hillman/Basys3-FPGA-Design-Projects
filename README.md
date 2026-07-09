@@ -93,8 +93,8 @@ The debounce algorithm runs as PicoBlaze assembly firmware, while the surroundin
 
 ### [3-Digit Multiplexed 7-Segment Counter](./3_Digit_Decimal_Counter)
 
-Modular VHDL counter system for the Basys3 seven-segment display.  
-The design includes clock division, cascaded decimal counters, display refresh logic, digit selection, segment decoding, terminal-count detection, and testbenches for both full-system and component-level verification.
+Modular VHDL counter system for the Basys3 seven segment display.  
+The design includes clock division, cascaded decimal counters, display refresh logic, digit selection, segment decoding, terminal count detection, and testbenches for both full system and component level verification.
 
 **Main areas:** `VHDL` · `RTL Design` · `Counters` · `Clock Division` · `Display Multiplexing` · `Testbenches`
 
