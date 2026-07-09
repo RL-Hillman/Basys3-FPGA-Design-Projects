@@ -57,7 +57,7 @@ The traffic decision logic runs in VHDL hardware as an FSM with hardware timers,
 
 ### [MicroBlaze Calculator System](./MicroBlaze_Calculator_System)
 
-Bare-metal calculator system running on a **MicroBlaze soft processor**.  
+Bare metal calculator system running on a **MicroBlaze soft processor**.  
 The system combines UART-Lite input, AXI GPIO peripherals, push-button operation selection, switch-based mode control, LEDs, and seven-segment display output.
 
 **Main areas:** `MicroBlaze` · `Bare-Metal C` · `AXI GPIO` · `UART-Lite` · `7-Segment Display` · `State Machines`
