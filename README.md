@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <b>RTL Design · Embedded Soft Processors · Custom AXI IP · Hardware/Software Co-Design · Simulation</b>
+<b>RTL Design · Soft Processor Systems · Custom AXI IP · Hardware/Software Co-Design · Simulation & Verification</b>
 </p>
 
 ---
