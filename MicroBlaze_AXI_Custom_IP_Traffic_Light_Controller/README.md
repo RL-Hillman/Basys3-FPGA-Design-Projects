@@ -11,12 +11,12 @@
 
 This project implements an FPGA-based traffic light controller on the **Basys 3** board using **VHDL**, **MicroBlaze soft processor**, and a custom **AXI4-Lite IP core**.
 
-The traffic-control logic is implemented in hardware as a finite state machine (FSM). The MicroBlaze processor is used to read the physical switch inputs, forward them to the custom AXI IP, monitor the FSM state, read the LED output, drive the 7-segment display, and print status information through UART.
+The traffic control logic is implemented in hardware as a finite state machine (FSM). The MicroBlaze processor is used to read the physical switch inputs, forward them to the custom AXI IP, monitor the FSM state, read the LED output, drive the 7-segment display, and print status information through UART.
 
 The system combines:
 
 - VHDL traffic-light FSM
-- 1-second and 2-second hardware timer modules
+- 1 second and 2 second hardware timer modules
 - Custom AXI4-Lite IP wrapper
 - MicroBlaze software application in C
 - Basys 3 switches, LEDs, and 7-segment display
@@ -332,7 +332,7 @@ This makes the waveform easier to inspect and keeps the simulation runtime short
 
 This project demonstrates a complete hardware/software co-design flow on an FPGA platform.
 
-The main value of the design is the separation between real-time hardware control and processor-based system management. The traffic-light decision logic runs inside a custom VHDL hardware core, while the MicroBlaze processor communicates with it through a memory-mapped AXI4-Lite interface.
+The main value of the design is the separation between real time hardware control and processor based system management. The traffic light decision logic runs inside a custom VHDL hardware core, while the MicroBlaze processor communicates with it through a memory-mapped AXI4-Lite interface.
 
 This structure shows how custom digital logic can be integrated into a processor-based embedded system, verified independently in simulation, and then connected to real board peripherals such as switches, LEDs, UART, and a 7-segment display.
 
