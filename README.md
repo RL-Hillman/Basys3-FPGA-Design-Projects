@@ -39,7 +39,7 @@ Each project is self contained and includes its own source files, constraints, s
 
 ### [MicroBlaze AXI Custom IP Traffic Light Controller](./MicroBlaze_AXI_Custom_IP_Traffic_Light_Controller)
 
-Hardware/software co-design built around a custom **AXI4-Lite traffic-light controller IP**.  
+Hardware/software co design built around a custom **AXI4-Lite traffic light controller IP**.  
 The traffic decision logic runs in VHDL hardware as an FSM with hardware timers, while the MicroBlaze processor handles monitoring, switch input forwarding, UART status output, and seven-segment display control.
 
 **Main areas:** `MicroBlaze` · `AXI4-Lite` · `Custom IP` · `VHDL FSM` · `Embedded C` · `Hardware Timers`
@@ -58,7 +58,7 @@ The traffic decision logic runs in VHDL hardware as an FSM with hardware timers,
 ### [MicroBlaze Calculator System](./MicroBlaze_Calculator_System)
 
 Bare metal calculator system running on a **MicroBlaze soft processor**.  
-The system combines UART-Lite input, AXI GPIO peripherals, push-button operation selection, switch-based mode control, LEDs, and seven-segment display output.
+The system combines UART-Lite input, AXI GPIO peripherals, push button operation selection, switch based mode control, LEDs, and seven segment display output.
 
 **Main areas:** `MicroBlaze` · `Bare-Metal C` · `AXI GPIO` · `UART-Lite` · `7-Segment Display` · `State Machines`
 
