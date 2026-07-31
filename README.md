@@ -1,4 +1,4 @@
-# FPGA Basys3 VHDL Projects
+# Basys3 FPGA Design Projects
 
 <p align="center">
   <img src="docs/images/fpga_basys3_banner.png" alt="FPGA Basys3 VHDL Projects" width="100%">
