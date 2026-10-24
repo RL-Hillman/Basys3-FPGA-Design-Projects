@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-<b>RTL Design · Soft Processor Systems · Custom AXI IP · Hardware/Software Co-Design · Simulation & Verification</b>
+<b>RTL Design · Soft Processor Systems · Hardware/Software Co-Design · Simulation & Verification</b>
 </p>
 
 ---
