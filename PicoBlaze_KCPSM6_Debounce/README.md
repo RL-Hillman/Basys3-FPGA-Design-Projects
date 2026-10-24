@@ -85,15 +85,10 @@ It also contains the VHDL logic that connects PicoBlaze logical I/O ports to the
 | `0x00` | Input | Registered switch value |
 | `0x01` | Output | LED register |
 
-The PicoBlaze processor does not connect directly to the Basys3 switches and LEDs. `top.vhd` defines the complete hardware system around the processor.
-
 ---
 ### `kcpsm6.vhd`
 
-`kcpsm6.vhd` is the KCPSM6 PicoBlaze processor core.
-
-This is the soft-core processor that executes the PicoBlaze assembly firmware.  
-In this project, the firmware performs the debounce algorithm, checks that the switch input is stable, reverses the lower four bits, and writes the result to the output port.
+The `kcpsm6.vhd` file implements the KCPSM6 PicoBlaze soft processor, which executes the assembly firmware responsible for switch debouncing. The firmware checks that the switch inputs are stable, reverses the order of the four input bits, and writes the result to the output port.
 
 The processor communicates with the rest of the design through:
 
