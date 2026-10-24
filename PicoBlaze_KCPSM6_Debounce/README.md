@@ -1,8 +1,5 @@
 # KCPSM6 PicoBlaze Switch Debounce System
 
-![HDL](https://img.shields.io/badge/HDL-VHDL-blue.svg) ![Soft Core](https://img.shields.io/badge/Soft_Core-KCPSM6%20PicoBlaze-orange.svg) ![Hardware](https://img.shields.io/badge/Hardware-Vivado%20RTL-purple.svg) ![Platform](https://img.shields.io/badge/Platform-Basys3-green.svg) ![Toolchain](https://img.shields.io/badge/Toolchain-Vivado%20%2B%20KCPSM6-red.svg) ![Interface](https://img.shields.io/badge/Interface-PicoBlaze%20I%2FO%20Ports-lightgrey.svg)
-
-
 ## Overview
 
 This project implements a switch debounce system on the Basys3 FPGA board using the **KCPSM6 PicoBlaze soft processor**.
