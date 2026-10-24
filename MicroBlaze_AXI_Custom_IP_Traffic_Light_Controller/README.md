@@ -24,30 +24,42 @@ The system models a traffic junction with three traffic-light groups: **A**, **B
 
 Each selected Basys 3 switch represents a vehicle request from one direction to another. The FSM receives these switch inputs and decides which traffic light group should be active.
 
-<p align="center">
-  <img src="DOCS/junction_layout.png" alt="Traffic Junction Layout" width="500"/>
-</p>
 
+<table>
+<tr>
+<td width="44%" align="center" valign="middle">
 
-<div align="center">
-  
-### Switch / Vehicle Request Mapping
+<img src="DOCS/junction_layout.png" alt="Traffic Junction Layout" width="100%"/>
 
-| Switch Bit | From | To | Traffic Light Group |
-|---:|---|---|:---:|
-| `SW15` | West | East | C |
-| `SW9`  | West | South | A |
-| `SW8`  | South | West | A |
-| `SW7`  | South | East | B |
-| `SW6`  | East | South | B |
-| `SW0`  | East | West | C |
+</td>
+<td width="56%" align="center" valign="middle">
 
-</div>
+<h3>Switch / Vehicle Request Mapping</h3>
+
+<table>
+<tr>
+<th>Switch Bit</th>
+<th>From</th>
+<th>To</th>
+<th>Traffic Light Group</th>
+</tr>
+<tr><td><code>SW15</code></td><td>West</td><td>East</td><td>C</td></tr>
+<tr><td><code>SW9</code></td><td>West</td><td>South</td><td>A</td></tr>
+<tr><td><code>SW8</code></td><td>South</td><td>West</td><td>A</td></tr>
+<tr><td><code>SW7</code></td><td>South</td><td>East</td><td>B</td></tr>
+<tr><td><code>SW6</code></td><td>East</td><td>South</td><td>B</td></tr>
+<tr><td><code>SW0</code></td><td>East</td><td>West</td><td>C</td></tr>
+</table>
+
+</td>
+</tr>
+</table>
 
 <p align="center">
 Only these six switches are used as traffic sensors.<br>
 All other switch bits are ignored by the traffic controller.
 </p>
+
 
 
 ## System Architecture and Vivado Block Design
