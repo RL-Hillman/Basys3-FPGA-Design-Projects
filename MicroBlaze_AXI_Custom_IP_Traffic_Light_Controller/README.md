@@ -98,7 +98,7 @@ flowchart TD
 
 ---
 
-### Main Vivado Components
+### Main Components
 
 The following table summarizes the main IP blocks used in the block design and their roles in the system.
 
