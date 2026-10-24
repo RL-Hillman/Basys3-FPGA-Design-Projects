@@ -4,7 +4,7 @@
 
 This project implements a modular 3-digit decimal counter system on the Digilent Basys3 FPGA board using VHDL.
 
-The system counts from `000` up to a user-selected terminal value `NNN`, where `N` is selected using the onboard switches. The current count is displayed on three multiplexed 7-segment digits, and an LED is asserted when the selected terminal count is reached.
+The system counts from `000` up to a user-selected terminal value `NNN`, where `N` is selected using the onboard switches. The current count is displayed on three multiplexed 7-segment digits, and a LED is asserted when the selected terminal count is reached.
 
 The design is organized as a complete FPGA digital system with separate modules for clock division, decimal counting, display refresh, digit selection, 7-segment decoding, and top-level control logic.
 
