@@ -89,8 +89,7 @@ The firmware is written in C and organized into modular functions.
 
 ## System Flow
 
-The main loop continuously checks the selected mode using `SW15` and `SW0`.  
-Each calculator mode then runs its own internal input flow.
+The main loop continuously checks the selected mode using `SW15` and `SW0`. Each calculator mode then runs its own internal input flow.
 
 ```mermaid
 flowchart TD
