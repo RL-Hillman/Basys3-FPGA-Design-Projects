@@ -106,10 +106,7 @@ The processor communicates with the rest of the design through:
 
 ### `PicoBlaze_Debounce.vhd`
 
-`PicoBlaze_Debounce.vhd` is the program memory of the PicoBlaze system.
-
-This file contains the actual machine instructions that the KCPSM6 processor runs.  
-
+`PicoBlaze_Debounce.vhd` is the program memory of the PicoBlaze system, this file contains the actual machine instructions that the KCPSM6 processor runs.  
 It was generated from the PicoBlaze assembly source file using the KCPSM6 assembler.
 
 The original firmware is written in a human-readable `.psm` assembly file, but the FPGA design uses the generated VHDL ROM version:
