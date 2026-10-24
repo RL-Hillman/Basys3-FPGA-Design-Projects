@@ -1,7 +1,5 @@
 # 3-Digit Multiplexed 7-Segment Counter
 
-![VHDL](https://img.shields.io/badge/Language-VHDL-blue.svg) ![Platform](https://img.shields.io/badge/Platform-Basys3-orange.svg) ![Toolchain](https://img.shields.io/badge/Toolchain-Xilinx%20Vivado-red.svg) ![FPGA](https://img.shields.io/badge/FPGA-Artix--7-green.svg)
-
 ## Overview
 
 This project implements a modular 3-digit decimal counter system on the Digilent Basys3 FPGA board using VHDL.
