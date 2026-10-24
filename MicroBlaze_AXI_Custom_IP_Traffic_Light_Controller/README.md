@@ -20,7 +20,7 @@ The main design idea is that the **traffic decision logic runs fully in hardware
 
 ## Traffic Junction and Input Mapping
 
-The controller models a traffic junction with three traffic-light groups: **A**, **B**, and **C**.
+The system models a traffic junction with three traffic-light groups: **A**, **B**, and **C**.
 
 Each selected Basys 3 switch represents a vehicle request from one direction to another. The FSM receives these switch inputs and decides which traffic light group should be active.
 
@@ -49,7 +49,6 @@ Only these six switches are used as traffic sensors.<br>
 All other switch bits are ignored by the traffic controller.
 </p>
 
----
 
 ## System Architecture and Vivado Block Design
 
