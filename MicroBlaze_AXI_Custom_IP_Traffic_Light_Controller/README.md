@@ -4,7 +4,7 @@
 
 This project implements an FPGA-based traffic light controller on the **Basys 3** board using **VHDL**, **MicroBlaze soft processor**, and a custom **AXI4-Lite IP core**.
 
-The traffic control logic is implemented in hardware as a finite state machine (FSM). The MicroBlaze processor is used to read the physical switch inputs, forward them to the custom AXI IP, monitor the FSM state, read the LED output, drive the 7-segment display, and print status information through UART.
+The traffic control logic is implemented in hardware as a finite state machine (FSM). The MicroBlaze processor is used to read the physical switch inputs, forward them to the custom IP, monitor the FSM state, read the LED output, drive the 7-segment display, and print status information through UART.
 
 The system combines:
 
@@ -16,43 +16,6 @@ The system combines:
 - VHDL simulation testbench that verifies all relevant switch combinations
 
 The main design idea is that the **traffic decision logic runs fully in hardware**, while the MicroBlaze handles system monitoring and user interface tasks.
-
----
-
-## Repository Structure
-
-```text
-MicroBlaze_AXI_Custom_IP_Traffic_Light_Controller/
-│
-├── DOCS/
-│   ├── junction_layout.png
-│   ├── fsm_main_diagram.png
-│   ├── default_state_cycle.png
-│   ├── block_design.png
-│   ├── address_map.png
-│   └── tb_traffic.png
-│
-├── SDK_code/
-│   └── main.c
-│
-├── constrs/
-│   └── Bayss3.xdc
-│
-├── traffic_fsm_IP/
-│   ├── HDL/
-│   │   ├── traffic_fsm_v1_0.vhd
-│   │   └── traffic_fsm_v1_0_S00_AXI.vhd
-│   │
-│   ├── src/
-│   │   ├── state_machine.vhd
-│   │   ├── timer.vhd
-│   │   └── traffic_top.vhd
-│   │
-│   └── sim/
-│       └── tb_traffic_top.vhd
-│
-└── README.md
-```
 
 ---
 
@@ -321,6 +284,42 @@ This makes the waveform easier to inspect and keeps the simulation runtime short
 
 ---
 
+## Repository Structure
+
+```text
+MicroBlaze_AXI_Custom_IP_Traffic_Light_Controller/
+│
+├── DOCS/
+│   ├── junction_layout.png
+│   ├── fsm_main_diagram.png
+│   ├── default_state_cycle.png
+│   ├── block_design.png
+│   ├── address_map.png
+│   └── tb_traffic.png
+│
+├── SDK_code/
+│   └── main.c
+│
+├── constrs/
+│   └── Bayss3.xdc
+│
+├── traffic_fsm_IP/
+│   ├── HDL/
+│   │   ├── traffic_fsm_v1_0.vhd
+│   │   └── traffic_fsm_v1_0_S00_AXI.vhd
+│   │
+│   ├── src/
+│   │   ├── state_machine.vhd
+│   │   ├── timer.vhd
+│   │   └── traffic_top.vhd
+│   │
+│   └── sim/
+│       └── tb_traffic_top.vhd
+│
+└── README.md
+```
+
+---
 ## Summary
 
 This project demonstrates a complete hardware/software co-design flow on an FPGA platform.
