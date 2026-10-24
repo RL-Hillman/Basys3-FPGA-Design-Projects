@@ -8,7 +8,6 @@
 <b>RTL Design · Soft Processor Systems · Hardware/Software Co-Design · Simulation & Verification</b>
 </p>
 
----
 
 ## Overview
 
