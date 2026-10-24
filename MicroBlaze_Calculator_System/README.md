@@ -1,7 +1,5 @@
 # MicroBlaze Calculator System
 
-![Firmware](https://img.shields.io/badge/Firmware-C-blue.svg) ![Soft CPU](https://img.shields.io/badge/Soft_CPU-MicroBlaze-orange.svg) ![Hardware](https://img.shields.io/badge/Hardware-Vivado%20Block%20Design-purple.svg) ![Platform](https://img.shields.io/badge/Platform-Basys3-green.svg) ![Toolchain](https://img.shields.io/badge/Toolchain-Vivado%20%2B%20SDK-red.svg) ![Interface](https://img.shields.io/badge/Interface-AXI%20GPIO%20%7C%20UART--Lite-lightgrey.svg)
-
 ## Overview
 
 This project implements an embedded calculator system on the Basys3 FPGA board using a Xilinx MicroBlaze soft processor.
