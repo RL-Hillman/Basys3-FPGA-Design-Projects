@@ -17,7 +17,6 @@ The system combines:
 
 The main design idea is that the **traffic decision logic runs fully in hardware**, while the MicroBlaze handles system monitoring and user interface tasks.
 
----
 
 ## Traffic Junction and Input Mapping
 
