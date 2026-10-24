@@ -6,17 +6,6 @@ This project implements a switch debounce system on the Basys3 FPGA board using 
 
 The system reads a 4-bit input from the physical board switches, performs a software debounce algorithm in PicoBlaze assembly, reverses the bit order, and outputs the result to four physical LEDs.
 
-The project demonstrates a complete FPGA soft-processor workflow: writing assembly firmware, generating VHDL program memory, integrating the KCPSM6 core into a VHDL top-level design, decoding PicoBlaze I/O ports, verifying the behavior in simulation, and preparing the design for Basys3 hardware implementation.
-
-## Project Goal
-
-The goal of this project is to demonstrate how a small soft-core processor can be used inside an FPGA to implement a practical embedded control task.
-
-Instead of designing the debounce algorithm entirely as custom VHDL logic, the debounce process is implemented as firmware running on PicoBlaze. The surrounding VHDL logic handles the hardware interface: switch sampling, LED output storage, PicoBlaze I/O port decoding, and Basys3 pin mapping through the XDC constraints file.
-
-
-
-
 This project demonstrates:
 
 - Hardware/software co-design inside an FPGA
