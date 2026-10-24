@@ -117,9 +117,7 @@ flowchart TD
     J -->|ENTER or mode change| C
 ```
 
-In Simple mode, only ADD and SUB are accepted.  
-In Advanced mode, ADD, SUB, MUL, and DIV are accepted.  
-After a result is printed, the same operands remain active, so the user can press another operation button or press ENTER to restart the input flow.
+In Simple mode, only ADD and SUB are accepted. In Advanced mode, ADD, SUB, MUL, and DIV are accepted. After a result is printed, the same operands remain active, so the user can press another operation button or press ENTER to restart the input flow.
 
 ## Static ELF Memory Footprint
 
