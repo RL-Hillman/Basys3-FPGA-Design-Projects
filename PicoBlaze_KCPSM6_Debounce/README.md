@@ -92,7 +92,7 @@ The PicoBlaze processor does not connect directly to the Basys3 switches and LED
 
 `kcpsm6.vhd` is the KCPSM6 PicoBlaze processor core.
 
-This is the soft soft-core processor that executes the PicoBlaze assembly firmware.  
+This is the soft-core processor that executes the PicoBlaze assembly firmware.  
 In this project, the firmware performs the debounce algorithm, checks that the switch input is stable, reverses the lower four bits, and writes the result to the output port.
 
 The processor communicates with the rest of the design through:
