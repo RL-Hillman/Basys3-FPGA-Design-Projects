@@ -231,6 +231,43 @@ The `timer.vhd` module asserts `done` for one clock cycle when the selected dela
 
 ---
 
+## Simulation and Verification
+
+The VHDL testbench verifies the traffic controller hardware independently from the MicroBlaze processor.
+
+The simulation uses `tb_traffic_top.vhd`, which instantiates the internal `traffic_top` module directly. This allows the FSM and timers to be tested before integration into the AXI custom IP.
+
+![Traffic FSM Simulation](DOCS/tb_traffic.png)
+
+In the shown simulation window, the switch vector changes between different request combinations.  
+The decoded request signals `req_A`, `req_B`, and `req_C` respond according to the active switch bits.
+
+The `en_1s` and `en_2s` signals indicate which timer is currently enabled.  
+The `done_1s` and `done_2s` pulses show when the selected timer has finished counting and the FSM is allowed to transition.
+
+The FSM transitions between states such as `A_ON`, `AB_ON`, `DEFAULT_A`, and `C_ON`.  
+The `state_out` / `current_state` signals show the active FSM state, and `leds_out[15:0]` changes according to that state.
+
+Overall, the waveform confirms that the requests are decoded correctly, the timers control the state transitions and the LED output matches the active traffic-light state.
+
+### Simulation Timing
+
+For simulation only, the timer clock-frequency generic is reduced:
+
+```vhdl
+TB_CLK_FREQ_HZ : positive := 10;
+```
+
+This allows the testbench to simulate the 1-second and 2-second timers much faster:
+
+| Simulated Timer | Simulation Equivalent |
+|---|---|
+| 1 second | 10 clock cycles |
+| 2 seconds | 20 clock cycles |
+
+This makes the waveform easier to inspect and keeps the simulation runtime short.
+
+---
 ## MicroBlaze Software
 
 The MicroBlaze software is implemented in `SDK_code/main.c`. The software does not decide which traffic light should be active, that decision is made by the VHDL FSM inside the custom IP. 
@@ -269,46 +306,6 @@ text    data    bss     dec     hex     filename
 
 The total software footprint is approximately **16.3 KB**.  
 In this design, the MicroBlaze local memory range is `0x00000000` to `0x0001FFFF`, which provides **128 KB** of local memory. Therefore, the application uses only about **12.7%** of the available local memory.
-
----
-
-## Simulation and Verification
-
-The VHDL testbench verifies the traffic controller hardware independently from the MicroBlaze processor.
-
-The simulation uses `tb_traffic_top.vhd`, which instantiates the internal `traffic_top` module directly. This allows the FSM and timers to be tested before integration into the AXI custom IP.
-
-![Traffic FSM Simulation](DOCS/tb_traffic.png)
-
-In the shown simulation window, the switch vector changes between different request combinations.  
-The decoded request signals `req_A`, `req_B`, and `req_C` respond according to the active switch bits.
-
-The `en_1s` and `en_2s` signals indicate which timer is currently enabled.  
-The `done_1s` and `done_2s` pulses show when the selected timer has finished counting and the FSM is allowed to transition.
-
-The FSM transitions between states such as `A_ON`, `AB_ON`, `DEFAULT_A`, and `C_ON`.  
-The `state_out` / `current_state` signals show the active FSM state, and `leds_out[15:0]` changes according to that state.
-
-Overall, the waveform confirms that the requests are decoded correctly, the timers control the state transitions and the LED output matches the active traffic-light state.
-
-### Simulation Timing
-
-For simulation only, the timer clock-frequency generic is reduced:
-
-```vhdl
-TB_CLK_FREQ_HZ : positive := 10;
-```
-
-This allows the testbench to simulate the 1-second and 2-second timers much faster:
-
-| Simulated Timer | Simulation Equivalent |
-|---|---|
-| 1 second | 10 clock cycles |
-| 2 seconds | 20 clock cycles |
-
-This makes the waveform easier to inspect and keeps the simulation runtime short.
-
----
 
 ## Repository Structure
 
