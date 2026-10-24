@@ -135,39 +135,72 @@ The traffic-light control logic is implemented in VHDL, with `traffic_top` integ
 | `traffic_fsm_v1_0.vhd` | Top wrapper of the custom AXI IP |
 | `traffic_fsm_v1_0_S00_AXI.vhd` | AXI4-Lite slave interface and register logic |
 
-### FSM State Encoding
+<table>
+<tr>
+<td width="65%" valign="top">
 
-| State Code | State Name | Description |
-|---|---|---|
-| `000` | `DEFAULT_A` | Default scan state, traffic light A active |
-| `001` | `DEFAULT_B` | Default scan state, traffic light B active |
-| `010` | `DEFAULT_C` | Default scan state, traffic light C active |
-| `011` | `A_ON` | Group A request is served |
-| `100` | `AB_ON` | Groups A and B are served together |
-| `101` | `B_ON` | Group B request is served |
-| `110` | `C_ON` | Group C request is served |
+<h3>FSM State Encoding</h3>
 
-### LED Output Mapping
+<table>
+<tr>
+<th>State Code</th>
+<th>State Name</th>
+<th>Description</th>
+</tr>
+<tr><td><code>000</code></td><td><code>DEFAULT_A</code></td><td>Default scan state, traffic light A active</td></tr>
+<tr><td><code>001</code></td><td><code>DEFAULT_B</code></td><td>Default scan state, traffic light B active</td></tr>
+<tr><td><code>010</code></td><td><code>DEFAULT_C</code></td><td>Default scan state, traffic light C active</td></tr>
+<tr><td><code>011</code></td><td><code>A_ON</code></td><td>Group A request is served</td></tr>
+<tr><td><code>100</code></td><td><code>AB_ON</code></td><td>Groups A and B are served together</td></tr>
+<tr><td><code>101</code></td><td><code>B_ON</code></td><td>Group B request is served</td></tr>
+<tr><td><code>110</code></td><td><code>C_ON</code></td><td>Group C request is served</td></tr>
+</table>
 
-| Traffic Light Group | LED Bit |
-|---|---:|
-| A | `LED15` |
-| B | `LED0` |
-| C | `LED8` |
+</td>
+<td width="35%" valign="top">
 
-<div align="center">
-  
-### FSM Diagram
-When no vehicle request is active, the FSM cycles between the default states.  
+<h3>LED Output Mapping</h3>
+
+<table>
+<tr>
+<th>Traffic Light Group</th>
+<th>LED Bit</th>
+</tr>
+<tr><td>A</td><td><code>LED15</code></td></tr>
+<tr><td>B</td><td><code>LED0</code></td></tr>
+<tr><td>C</td><td><code>LED8</code></td></tr>
+</table>
+
+</td>
+</tr>
+</table>
+
+---
+
+<table>
+<tr>
+<td width="65%" align="center" valign="top">
+
+<h3>FSM Diagram</h3>
+
+<p>
+When no vehicle request is active, the FSM cycles between the default states.<br>
 When a request is detected, the FSM moves to the matching service state.
-![Traffic FSM Diagram](DOCS/fsm_main_diagram.png)
+</p>
 
+<img src="DOCS/fsm_main_diagram.png" alt="Traffic FSM Diagram" width="100%">
 
-  
-### Default State Cycle
+</td>
+<td width="35%" align="center" valign="top">
 
-![Default State Cycle](DOCS/default_state_cycle.png)
-</div>
+<h3>Default State Cycle</h3>
+
+<img src="DOCS/default_state_cycle.png" alt="Default State Cycle" width="100%">
+
+</td>
+</tr>
+</table>
+
 The default cycle is:
 
 ```text
