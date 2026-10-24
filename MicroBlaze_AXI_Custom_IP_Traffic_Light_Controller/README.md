@@ -121,6 +121,19 @@ The address map defines how the MicroBlaze accesses each memory-mapped periphera
 ![MicroBlaze Address Map](DOCS/address_map.png)
 ---
 
+### AXI4-Lite Interface
+
+The custom IP exposes four 32-bit AXI4-Lite registers. The MicroBlaze writes the switch vector into the custom IP and reads back the current FSM state and LED output.
+
+### Custom IP Register Map
+
+| Offset | Register | Direction | Description |
+|---:|---|---|---|
+| `0x00` | State Register | Read | Current FSM state |
+| `0x04` | LED Register | Read | Current LED output vector |
+| `0x08` | Switch Register | Write | Switch/request input written by MicroBlaze |
+| `0x0C` | Reserved | - | Unused |
+
 ## Hardware Design and FSM Logic
 
 The traffic-light control logic is implemented in VHDL, with `traffic_top` integrating the FSM and timers. The custom AXI4-Lite IP instantiates `traffic_top` and connects it to the AXI registers.
@@ -215,21 +228,6 @@ DEFAULT_A → DEFAULT_B → DEFAULT_C → DEFAULT_A
 | 2-second timer | Used while serving an active traffic request |
 
 The `timer.vhd` module asserts `done` for one clock cycle when the selected delay expires. 
-
----
-
-## AXI4-Lite Interface
-
-The custom IP exposes four 32-bit AXI4-Lite registers. The MicroBlaze writes the switch vector into the custom IP and reads back the current FSM state and LED output.
-
-### Custom IP Register Map
-
-| Offset | Register | Direction | Description |
-|---:|---|---|---|
-| `0x00` | State Register | Read | Current FSM state |
-| `0x04` | LED Register | Read | Current LED output vector |
-| `0x08` | Switch Register | Write | Switch/request input written by MicroBlaze |
-| `0x0C` | Reserved | - | Unused |
 
 ---
 
