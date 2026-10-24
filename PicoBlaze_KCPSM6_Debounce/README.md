@@ -123,9 +123,7 @@ kcpsm6.exe
 PicoBlaze_Debounce.vhd
 ```
 
-During operation, the PicoBlaze processor sends an instruction address to this memory through `address`.  
-The program memory returns the matching 18-bit instruction through `instruction`.  
-The `bram_enable` signal enables the memory access, and `clk` synchronizes the ROM with the rest of the system.
+During operation, the PicoBlaze processor provides an instruction address through `address`, and the program memory (`PicoBlaze_Debounce.vhd`) returns the corresponding 18-bit instruction through `instruction`. The `bram_enable` signal controls memory access, while `clk` synchronizes instruction reads with the system clock.
 
 ---
 
