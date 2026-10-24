@@ -150,8 +150,7 @@ For fast simulation, use:
 program_memory_inst : entity work.PicoBlaze_Debounce_tst
 ```
 
-The delay value is not changed inside Vivado directly.  
-To change the debounce timing, the PicoBlaze assembly firmware must be edited and the VHDL program memory must be regenerated.
+The delay value is not changed inside Vivado directly, to change the debounce timing, the PicoBlaze assembly firmware must be edited and the VHDL program memory must be regenerated.
 
 ---
 
