@@ -233,11 +233,7 @@ The `timer.vhd` module asserts `done` for one clock cycle when the selected dela
 
 ## MicroBlaze Software
 
-The MicroBlaze software is implemented in `SDK_code/main.c`.
-
-The software does not decide which traffic light should be active.  
-That decision is made by the VHDL FSM inside the custom IP.
-
+The MicroBlaze software is implemented in `SDK_code/main.c`. The software does not decide which traffic light should be active, that decision is made by the VHDL FSM inside the custom IP. 
 Instead, the software performs system-level control and monitoring.
 
 ### 7-Segment Display
