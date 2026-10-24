@@ -6,16 +6,7 @@ This project implements a switch debounce system on the Basys3 FPGA board using 
 
 The system reads a 4-bit input from the physical board switches, performs a software debounce algorithm in PicoBlaze assembly, reverses the bit order, and outputs the result to four physical LEDs.
 
-This project demonstrates:
-
-- Hardware/software co-design inside an FPGA
-- KCPSM6 PicoBlaze soft processor integration
-- PicoBlaze assembly programming
-- VHDL top-level system design
-- Program memory generation from `.psm` firmware
-- Register-based FPGA hardware interfacing
-- PicoBlaze `INPUT` and `OUTPUT` port decoding
-- Vivado behavioral simulation and waveform verification
+The project demonstrates a complete FPGA hardware/software co-design workflow: writing PicoBlaze assembly firmware, generating VHDL program memory from `.psm` files, integrating the KCPSM6 core into a VHDL top-level design, implementing register-based hardware interfacing through PicoBlaze `INPUT` and `OUTPUT` port decoding, verifying the behavior through Vivado behavioral simulation and waveform analysis, and preparing the design for Basys3 hardware implementation.
 
 ## System Behavior
 
