@@ -123,28 +123,17 @@ The address map defines how the MicroBlaze accesses each memory-mapped periphera
 
 ## Hardware Design and FSM Logic
 
-The hardware logic is written in VHDL. The internal traffic controller is separated from the AXI wrapper, which makes the FSM easier to simulate and verify independently.
+The traffic-light control logic is implemented in VHDL, with `traffic_top` integrating the FSM and timers. The custom AXI4-Lite IP instantiates `traffic_top` and connects it to the AXI registers.
 
 ### VHDL Files
 
 | File | Role |
 |---|---|
+| `traffic_top.vhd` | Integrates the FSM with two timer instances (1s and 2s) |
 | `state_machine.vhd` | Main traffic-light FSM |
 | `timer.vhd` | Generic timer module |
-| `traffic_top.vhd` | Connects the FSM and timer modules |
 | `traffic_fsm_v1_0.vhd` | Top wrapper of the custom AXI IP |
 | `traffic_fsm_v1_0_S00_AXI.vhd` | AXI4-Lite slave interface and register logic |
-
-The internal hardware core is built from:
-
-```text
-traffic_top
-├── timer 1s
-├── timer 2s
-└── traffic_fsm
-```
-
-The AXI wrapper instantiates `traffic_top` inside the custom IP and connects it to AXI registers.
 
 ### FSM State Encoding
 
