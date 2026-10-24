@@ -96,7 +96,7 @@ flowchart TD
 
 ![Vivado Block Design](DOCS/block_design.png)
 
----
+
 
 ### Main Components
 
