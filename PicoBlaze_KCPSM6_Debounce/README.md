@@ -85,11 +85,9 @@ It also contains the VHDL logic that connects PicoBlaze logical I/O ports to the
 | `0x00` | Input | Registered switch value |
 | `0x01` | Output | LED register |
 
-The PicoBlaze processor does not connect directly to the Basys3 switches and LEDs.  
-`top.vhd` defines the complete hardware system around the processor.
+The PicoBlaze processor does not connect directly to the Basys3 switches and LEDs. `top.vhd` defines the complete hardware system around the processor.
 
 ---
-
 ### `kcpsm6.vhd`
 
 `kcpsm6.vhd` is the KCPSM6 PicoBlaze processor core.
