@@ -5,14 +5,6 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/HDL-VHDL-1f6feb?style=for-the-badge" alt="VHDL">
-  <img src="https://img.shields.io/badge/FPGA-Basys3%20%7C%20Artix--7-238636?style=for-the-badge" alt="Basys3 Artix-7">
-  <img src="https://img.shields.io/badge/Tool-Xilinx%20Vivado-da3633?style=for-the-badge" alt="Xilinx Vivado">
-  <img src="https://img.shields.io/badge/Soft%20Processors-MicroBlaze%20%7C%20KCPSM6%20PicoBlaze-f7811d?style=for-the-badge" alt="MicroBlaze and KCPSM6 PicoBlaze">
-  <img src="https://img.shields.io/badge/Interface-AXI4--Lite-8957e5?style=for-the-badge" alt="AXI4-Lite">
-</p>
-
-<p align="center">
 <b>RTL Design · Soft Processor Systems · Custom AXI IP · Hardware/Software Co-Design · Simulation & Verification</b>
 </p>
 
