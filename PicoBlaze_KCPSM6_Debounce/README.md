@@ -388,7 +388,7 @@ They are included to document the development process and make the project easie
 
 ## Summary
 
-This project implements a PicoBlaze-based switch debounce system, successfully demonstrating a complete Hardware/Software co-design flow on the Basys3 FPGA. By offloading the sequential debounce logic to a soft-core processor, the design maintains a simple, modular VHDL hardware architecture. 
+This project implements a PicoBlaze-based switch debounce system, successfully demonstrating a complete Hardware/Software co-design flow on the Basys3 FPGA. By offloading the sequential debounce logic to a soft-core processor, the design keeps the VHDL hardware focused on system integration and I/O interfacing, resulting in a simple and modular architecture.
 
 The project covers the full development cycle: from writing assembly and generating program memory ROM, to integrating the core into Vivado, running behavioral simulations, and mapping to physical hardware. Ultimately, it highlights how soft-core processors can be effectively used inside FPGA logic to implement practical embedded control behavior.
 
